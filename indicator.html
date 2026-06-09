@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Indicator — VERIXA | Proprietary TradingView Analytics</title>
+<meta name="description" content="Verixa's proprietary TradingView indicator — advanced market structure analysis, trend identification, and trading intelligence built by a software engineer." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Indicator-specific styles */
+  .indicator-screen {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    position: relative;
+  }
+  .screen-header {
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .screen-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .screen-body { padding: 1.5rem; position: relative; min-height: 320px; }
+  .chart-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 160px;
+  }
+  .c-bar {
+    flex: 1; border-radius: 3px 3px 0 0;
+    position: relative;
+    transition: opacity 0.3s;
+  }
+  .c-bar.bull { background: rgba(0,208,132,0.7); }
+  .c-bar.bear { background: rgba(239,68,68,0.6); }
+  .c-bar:hover { opacity: 0.85; }
+  .signal-tag {
+    position: absolute; top: -32px; left: 50%; transform: translateX(-50%);
+    font-size: 0.65rem; font-weight: 700; padding: 3px 7px;
+    border-radius: 4px; white-space: nowrap;
+  }
+  .signal-tag.buy  { background: rgba(0,208,132,0.2); color: var(--green); border: 1px solid rgba(0,208,132,0.4); }
+  .signal-tag.sell { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  .chart-overlay {
+    position: absolute; inset: 1.5rem; pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">VERIXA<span class="logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="indicator.html">Indicator</a></li>
+      <li><a href="founder.html">Founder</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="contact.html" class="btn btn-primary btn-sm">Request Access</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="indicator.html">Indicator</a></li>
+    <li><a href="founder.html">Founder</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="mobile-cta">
+    <a href="contact.html" class="btn btn-primary">Request Access</a>
+    <a href="founder.html" class="btn btn-outline">Contact Founder</a>
+  </div>
+</div>
+
+<!-- ═══ HERO ══════════════════════════════════ -->
+<section style="position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden; padding-top:68px;">
+  <div class="orb orb-green" style="width:700px;height:700px;top:-250px;right:-200px; opacity:0.1;"></div>
+  <div class="orb orb-blue"  style="width:500px;height:500px;bottom:-200px;left:-150px; opacity:0.1;"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,#050816,transparent);z-index:1;"></div>
+
+  <div class="container" style="position:relative;z-index:2; padding-top:4rem; padding-bottom:5rem;">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;">
+
+      <!-- Left: Copy -->
+      <div>
+        <div class="badge badge-green animate-fadeup" style="margin-bottom:1.25rem;">
+          <span>●</span> TradingView Indicator
+        </div>
+        <h1 class="display-xl animate-fadeup delay-1" style="margin-bottom:1.25rem;">
+          The Verixa<br><span class="gradient-text">Intelligence Suite</span>
+        </h1>
+        <p class="body-lg text-muted animate-fadeup delay-2" style="margin-bottom:2rem;">
+          A proprietary TradingView indicator built to give traders a structured, technology-driven view of market conditions — cutting through noise to expose the mechanics that actually drive price.
+        </p>
+        <div class="flex gap-2 animate-fadeup delay-3" style="flex-wrap:wrap;">
+          <a href="contact.html" class="btn btn-primary btn-lg">Request Access</a>
+          <a href="founder.html" class="btn btn-outline btn-lg">Contact Founder</a>
+        </div>
+        <div class="flex gap-2 animate-fadeup delay-4 mt-4" style="flex-wrap:wrap;">
+          <div class="badge badge-blue">TradingView Native</div>
+          <div class="badge badge-green">Pine Script</div>
+          <div class="badge badge-blue">Multi-Timeframe</div>
+        </div>
+      </div>
+
+      <!-- Right: Mockup chart -->
+      <div class="animate-fadeup delay-2">
+        <div class="indicator-screen">
+          <div class="screen-header">
+            <div class="screen-dot" style="background:#ff5f57;"></div>
+            <div class="screen-dot" style="background:#ffbd2e;"></div>
+            <div class="screen-dot" style="background:#28c840;"></div>
+            <span style="font-size:0.78rem; color:var(--text-subtle); margin-left:8px;">VERIXA Intelligence Suite — XAUUSD, 1H</span>
+          </div>
+          <div class="screen-body">
+            <!-- Chart bars -->
+            <div class="chart-bar" style="padding:0 0.5rem;">
+              <div class="c-bar bear" style="height:45%;"></div>
+              <div class="c-bar bull" style="height:55%;"></div>
+              <div class="c-bar bull" style="height:65%;"></div>
+              <div class="c-bar bear" style="height:50%;"></div>
+              <div class="c-bar bull" style="height:70%;"></div>
+              <div class="c-bar bull" style="height:80%; position:relative;">
+                <div class="signal-tag buy">BOS ↑</div>
+              </div>
+              <div class="c-bar bull" style="height:85%;"></div>
+              <div class="c-bar bear" style="height:72%;"></div>
+              <div class="c-bar bull" style="height:90%;"></div>
+              <div class="c-bar bull" style="height:95%;"></div>
+              <div class="c-bar bear" style="height:78%; position:relative;">
+                <div class="signal-tag sell">CHoCH</div>
+              </div>
+              <div class="c-bar bear" style="height:60%;"></div>
+              <div class="c-bar bear" style="height:50%;"></div>
+              <div class="c-bar bull" style="height:58%; position:relative;">
+                <div class="signal-tag buy">OB Zone</div>
+              </div>
+              <div class="c-bar bull" style="height:68%;"></div>
+              <div class="c-bar bull" style="height:74%;"></div>
+            </div>
+            <!-- Indicator row 1 -->
+            <div style="margin-top:1rem; padding:0 0.5rem;">
+              <div style="font-size:0.7rem; color:var(--text-subtle); margin-bottom:0.4rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;">Trend Bias</div>
+              <div style="display:flex; gap:4px; align-items:center;">
+                <div style="height:6px; border-radius:3px; background:var(--green); flex:7;"></div>
+                <div style="height:6px; border-radius:3px; background:rgba(239,68,68,0.5); flex:3;"></div>
+              </div>
+            </div>
+            <!-- Indicator row 2 -->
+            <div style="margin-top:0.85rem; padding:0 0.5rem;">
+              <div style="font-size:0.7rem; color:var(--text-subtle); margin-bottom:0.4rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;">Market Structure</div>
+              <div style="display:flex; gap:8px;">
+                <div class="badge badge-green" style="font-size:0.7rem; padding:3px 10px;">Bullish Bias</div>
+                <div class="badge badge-blue" style="font-size:0.7rem; padding:3px 10px;">HTF: Uptrend</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p style="text-align:center; font-size:0.75rem; color:var(--text-subtle); margin-top:0.75rem;">
+          Illustrative visualization — not financial advice
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ OVERVIEW ═══════════════════════════════ -->
+<section class="section" style="background:var(--bg-primary);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">Overview</div>
+      <h2 class="display-md" style="margin:1rem 0 1rem;">Technology-Driven Market Analysis</h2>
+      <p class="body-md text-muted" style="max-width:640px; margin:0 auto;">
+        The Verixa Intelligence Suite brings together multiple analytical frameworks into a single, cohesive TradingView experience — engineered for clarity, not complexity.
+      </p>
+    </div>
+    <div class="grid-3">
+      <div class="card reveal" style="text-align:center; padding:2.5rem 2rem;">
+        <div style="font-size:2.5rem; margin-bottom:1rem; display:block;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" style="margin:0 auto;display:block;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 class="card-title">TradingView Integration</h3>
+        <p class="card-body">Runs natively inside your TradingView workspace. No external apps, no browser plugins, no APIs to configure — just add it and it works.</p>
+      </div>
+      <div class="card reveal delay-1" style="text-align:center; padding:2.5rem 2rem;">
+        <div style="margin-bottom:1rem; display:block;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" style="margin:0 auto;display:block;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <h3 class="card-title">Advanced Market Structure</h3>
+        <p class="card-body">Automatically identifies and annotates key market structure events — break of structure, change of character, order blocks, and liquidity levels.</p>
+      </div>
+      <div class="card reveal delay-2" style="text-align:center; padding:2.5rem 2rem;">
+        <div style="margin-bottom:1rem; display:block;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" style="margin:0 auto;display:block;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3 class="card-title">User-Friendly Design</h3>
+        <p class="card-body">Despite its analytical depth, the indicator is designed to present information clearly. Visual hierarchy ensures the most critical data is immediately visible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ KEY FEATURES ═══════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">Key Features</div>
+      <h2 class="display-md" style="margin:1rem 0 1rem;">What the Indicator Does</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; max-width:960px; margin:0 auto;">
+
+      <div class="glass reveal" style="padding:2rem;">
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div class="card-icon" style="flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>
+          </div>
+          <div>
+            <h3 class="card-title">Market Structure Analysis</h3>
+            <p class="card-body">Detects and labels Break of Structure (BOS) and Change of Character (CHoCH) events in real time, giving traders a clear structural map of market direction.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass reveal delay-1" style="padding:2rem;">
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div class="card-icon blue" style="flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <div>
+            <h3 class="card-title">Trend Identification</h3>
+            <p class="card-body">Multi-timeframe trend bias calculation provides a composite view of directional pressure across different time horizons simultaneously.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass reveal delay-1" style="padding:2rem;">
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div class="card-icon" style="flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div>
+            <h3 class="card-title">Order Block Detection</h3>
+            <p class="card-body">Automatically identifies institutional order blocks and fair value gaps — high-probability reaction zones that institutional price action theory uses as reference points.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass reveal delay-2" style="padding:2rem;">
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div class="card-icon blue" style="flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div>
+            <h3 class="card-title">Smart Alerts</h3>
+            <p class="card-body">Configurable alert conditions notify you when key structural events occur — no need to watch charts continuously. Integrate with email, mobile, or webhook.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass reveal delay-2" style="padding:2rem;">
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div class="card-icon" style="flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <div>
+            <h3 class="card-title">Data Visualization</h3>
+            <p class="card-body">Visual layers are carefully designed to add information without cluttering the chart. Clean, professional presentation that fits into a trader's existing workflow.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass reveal delay-3" style="padding:2rem;">
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div class="card-icon blue" style="flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div>
+            <h3 class="card-title">Continuous Improvement</h3>
+            <p class="card-body">The indicator evolves with ongoing market research and user feedback. Updates are pushed directly to TradingView — improvements are automatic.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══════════════════════════ -->
+<section class="section" style="background:var(--bg-primary);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">How It Works</div>
+      <h2 class="display-md" style="margin:1rem 0 1rem;">Analytical Architecture</h2>
+      <p class="body-md text-muted">The indicator is built around a layered analytical model that processes market data through multiple structured stages.</p>
+    </div>
+    <div style="max-width:820px; margin:0 auto;">
+      <div style="display:flex; flex-direction:column; gap:0; position:relative;">
+
+        <div class="reveal" style="display:flex; gap:1.5rem; align-items:flex-start; padding-bottom:2.5rem; position:relative;">
+          <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--green-dim);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--green);font-size:0.9rem;position:relative;z-index:1;">01</div>
+            <div style="width:2px;flex:1;background:var(--border);margin-top:8px;min-height:40px;"></div>
+          </div>
+          <div class="glass" style="padding:1.5rem; flex:1;">
+            <h3 class="card-title">Price Data Ingestion</h3>
+            <p class="card-body">Raw OHLCV data is consumed from TradingView's data feed, preprocessed, and structured for analysis. The indicator works across all instruments and timeframes available on TradingView.</p>
+          </div>
+        </div>
+
+        <div class="reveal delay-1" style="display:flex; gap:1.5rem; align-items:flex-start; padding-bottom:2.5rem;">
+          <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--blue-dim);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--blue);font-size:0.9rem;position:relative;z-index:1;">02</div>
+            <div style="width:2px;flex:1;background:var(--border);margin-top:8px;min-height:40px;"></div>
+          </div>
+          <div class="glass" style="padding:1.5rem; flex:1;">
+            <h3 class="card-title">Structure Detection Engine</h3>
+            <p class="card-body">A rules-based engine processes price data to identify swing highs, swing lows, and structural pivots. These form the foundation for all higher-level analysis.</p>
+          </div>
+        </div>
+
+        <div class="reveal delay-2" style="display:flex; gap:1.5rem; align-items:flex-start; padding-bottom:2.5rem;">
+          <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--green-dim);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--green);font-size:0.9rem;position:relative;z-index:1;">03</div>
+            <div style="width:2px;flex:1;background:var(--border);margin-top:8px;min-height:40px;"></div>
+          </div>
+          <div class="glass" style="padding:1.5rem; flex:1;">
+            <h3 class="card-title">Multi-Timeframe Analysis</h3>
+            <p class="card-body">Structural data from multiple timeframes is synthesized into a unified bias model. Higher timeframe context anchors the interpretation of lower timeframe signals.</p>
+          </div>
+        </div>
+
+        <div class="reveal delay-3" style="display:flex; gap:1.5rem; align-items:flex-start;">
+          <div style="display:flex; flex-direction:column; align-items:center; flex-shrink:0;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--blue-dim);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--blue);font-size:0.9rem;">04</div>
+          </div>
+          <div class="glass" style="padding:1.5rem; flex:1;">
+            <h3 class="card-title">Visual Output & Alerts</h3>
+            <p class="card-body">Results are rendered as clearly labelled visual overlays on the chart, with configurable alert conditions for key structural events. The trader retains full decision-making authority.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DISCLAIMER + CTA ═══════════════════════ -->
+<section class="section">
+  <div class="container">
+    <!-- Disclaimer -->
+    <div class="reveal glass" style="padding:1.5rem 2rem; max-width:860px; margin:0 auto 3rem; border-left:3px solid var(--blue);">
+      <div style="display:flex; gap:1rem; align-items:flex-start;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p class="body-sm text-muted">
+          <strong style="color:var(--text-muted);">Important Notice:</strong> The Verixa Intelligence Suite is an analytical tool designed to assist market analysis. It does not constitute financial advice, and past performance of any analytical methodology does not guarantee future results. All trading decisions are the sole responsibility of the trader. Markets carry inherent risk — never trade with capital you cannot afford to lose.
+        </p>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="reveal" style="text-align:center; max-width:640px; margin:0 auto;">
+      <h2 class="display-md" style="margin-bottom:1.25rem;">Ready to Experience <span class="gradient-text">Structured Market Analysis?</span></h2>
+      <p class="body-lg text-muted" style="margin-bottom:2.5rem;">
+        Request access to the Verixa Intelligence Suite or reach out directly to learn more about how the indicator works.
+      </p>
+      <div class="flex items-center justify-center gap-2" style="flex-wrap:wrap;">
+        <a href="contact.html" class="btn btn-primary btn-lg">Request Access</a>
+        <a href="founder.html" class="btn btn-outline btn-lg">Contact Founder</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="display:inline-flex; margin-bottom:0.5rem;">VERIXA<span class="logo-dot">.</span></a>
+        <p class="tagline">Built by Engineers. Driven by Markets.</p>
+        <div class="footer-socials">
+          <a href="https://www.linkedin.com/in/mohamedhanas" target="_blank" rel="noopener" class="footer-social-btn" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://www.instagram.com/the.pipsociety?igsh=Z25vYmlnbmc1anJz&utm_source=qr" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="mailto:mohamedhanaskkl@gmail.com" class="footer-social-btn" aria-label="Email">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="founder.html">Founder</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul>
+          <li><a href="indicator.html">Indicator</a></li>
+          <li><a href="indicator.html">Analytics</a></li>
+          <li><a href="indicator.html">Automation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="contact.html">Get in Touch</a></li>
+          <li><a href="founder.html">Meet the Founder</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Verixa. All rights reserved.</span>
+      <span>Engineering Smarter Financial Solutions</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

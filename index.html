@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VERIXA — Built by Engineers. Driven by Markets.</title>
+<meta name="description" content="Verixa is a financial technology company developing professional trading technologies, TradingView indicators, market analytics, and automation solutions for modern traders." />
+<meta property="og:title" content="VERIXA — Built by Engineers. Driven by Markets." />
+<meta property="og:description" content="Professional trading technology designed to help traders analyze financial markets through advanced market intelligence, automation, and data-driven insights." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ═══ NAVBAR ════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">VERIXA<span class="logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="indicator.html">Indicator</a></li>
+      <li><a href="founder.html">Founder</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="indicator.html" class="btn btn-primary btn-sm">Explore Indicator</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="indicator.html">Indicator</a></li>
+    <li><a href="founder.html">Founder</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="mobile-cta">
+    <a href="indicator.html" class="btn btn-primary">Explore Indicator</a>
+    <a href="founder.html" class="btn btn-outline">Contact Founder</a>
+  </div>
+</div>
+
+<!-- ═══ HERO ══════════════════════════════════ -->
+<section style="position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden; padding-top:68px;">
+
+  <!-- Animated canvas -->
+  <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;"></canvas>
+
+  <!-- Glow orbs -->
+  <div class="orb orb-green" style="width:600px;height:600px;top:-200px;left:-200px;"></div>
+  <div class="orb orb-blue"  style="width:500px;height:500px;bottom:-100px;right:-150px;"></div>
+
+  <!-- Gradient fade at bottom -->
+  <div style="position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,#050816,transparent);z-index:1;"></div>
+
+  <div class="container" style="position:relative;z-index:2; padding-top:4rem; padding-bottom:5rem;">
+    <div style="max-width:820px; margin:0 auto; text-align:center;">
+
+      <div class="badge badge-green animate-fadeup mb-3">
+        <span>●</span> Financial Technology
+      </div>
+
+      <h1 class="display-xl animate-fadeup delay-1" style="margin-bottom:1.5rem;">
+        Built by Engineers.<br>
+        <span class="gradient-text">Driven by Markets.</span>
+      </h1>
+
+      <p class="body-lg text-muted animate-fadeup delay-2" style="max-width:640px;margin:0 auto 2.5rem;">
+        Professional trading technology designed to help traders analyze financial markets through advanced market intelligence, automation and data-driven insights.
+      </p>
+
+      <div class="flex items-center justify-center gap-2 animate-fadeup delay-3" style="flex-wrap:wrap;">
+        <a href="indicator.html" class="btn btn-primary btn-lg">
+          Explore Indicator
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="founder.html" class="btn btn-outline btn-lg">Contact Founder</a>
+      </div>
+
+      <!-- Trust indicators -->
+      <div class="flex items-center justify-center gap-4 animate-fadeup delay-4 mt-6" style="flex-wrap:wrap;">
+        <div class="flex items-center gap-1" style="color:var(--text-subtle);font-size:0.82rem;">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.8 3.6L14 5.4l-3 2.9.7 4.1L8 10.4l-3.7 2 .7-4.1L2 5.4l4.2-.8L8 1z" fill="var(--green)" opacity=".8"/></svg>
+          TradingView Integrated
+        </div>
+        <div class="flex items-center gap-1" style="color:var(--text-subtle);font-size:0.82rem;">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="var(--blue)" stroke-width="1.5" opacity=".8"/><path d="M8 5v3.5l2 1.5" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" opacity=".8"/></svg>
+          Real-time Analytics
+        </div>
+        <div class="flex items-center gap-1" style="color:var(--text-subtle);font-size:0.82rem;">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 8s2-5 6-5 6 5 6 5-2 5-6 5-6-5-6-5z" stroke="var(--green)" stroke-width="1.5" opacity=".8"/><circle cx="8" cy="8" r="2" fill="var(--green)" opacity=".8"/></svg>
+          Engineer-Built Technology
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS ═════════════════════════════════ -->
+<section class="section-sm" style="background:var(--bg-primary); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="stats-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; text-align:center;">
+      <div class="reveal">
+        <div class="stat-value"><span data-target="7" data-suffix="+">7+</span></div>
+        <div class="stat-label">Core Technologies</div>
+      </div>
+      <div class="reveal delay-1">
+        <div class="stat-value"><span data-target="100" data-suffix="%">100%</span></div>
+        <div class="stat-label">TradingView Native</div>
+      </div>
+      <div class="reveal delay-2">
+        <div class="stat-value"><span data-target="5" data-suffix="+">5+</span></div>
+        <div class="stat-label">Asset Classes Covered</div>
+      </div>
+      <div class="reveal delay-3">
+        <div class="stat-value"><span data-target="24" data-suffix="/7">24/7</span></div>
+        <div class="stat-label">Indicator Active</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT SNIPPET ═════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;">
+      <div class="reveal">
+        <div class="section-eyebrow label">About Verixa</div>
+        <h2 class="display-md" style="margin:1rem 0 1.25rem;">Where Engineering Meets <span class="gradient-text">Market Intelligence</span></h2>
+        <p class="body-md text-muted" style="margin-bottom:1.25rem;">
+          Verixa combines software engineering expertise with market intelligence to create innovative trading technologies and analytical tools for modern traders.
+        </p>
+        <p class="body-md text-muted" style="margin-bottom:2rem;">
+          Founded by an engineer who understands both code and markets, Verixa builds tools that translate complex market data into clear, actionable intelligence — without the noise.
+        </p>
+        <a href="about.html" class="btn btn-outline">
+          Learn Our Story
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="reveal delay-2" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.75rem; margin-bottom:0.6rem;">⚙️</div>
+          <div class="card-title" style="font-size:0.95rem;">Engineering Precision</div>
+          <p class="body-sm text-muted">Built to production-grade software standards</p>
+        </div>
+        <div class="card" style="text-align:center; margin-top:1.5rem;">
+          <div style="font-size:1.75rem; margin-bottom:0.6rem;">📊</div>
+          <div class="card-title" style="font-size:0.95rem;">Market Intelligence</div>
+          <p class="body-sm text-muted">Data-driven insights from structured analysis</p>
+        </div>
+        <div class="card" style="text-align:center; margin-top:-0.75rem;">
+          <div style="font-size:1.75rem; margin-bottom:0.6rem;">🔄</div>
+          <div class="card-title" style="font-size:0.95rem;">Automation</div>
+          <p class="body-sm text-muted">Smart workflows that reduce manual processes</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.75rem; margin-bottom:0.6rem;">☁️</div>
+          <div class="card-title" style="font-size:0.95rem;">Cloud Native</div>
+          <p class="body-sm text-muted">Modern scalable architecture on Azure</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CORE SOLUTIONS ════════════════════════ -->
+<section class="section" style="background:var(--bg-primary);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">Core Solutions</div>
+      <h2 class="display-md" style="margin:1rem 0 1rem;">What We Build</h2>
+      <p class="body-md text-muted">Professional-grade financial technology tools engineered for serious traders and market analysts.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card reveal">
+        <div class="card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 class="card-title">TradingView Indicators</h3>
+        <p class="card-body">Custom Pine Script indicators built for TradingView, delivering institutional-grade market structure analysis in an accessible, visual format.</p>
+      </div>
+      <div class="card reveal delay-1">
+        <div class="card-icon blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M19.07 19.07l-1.41-1.41M5.34 5.34L3.93 3.93M22 12h-2M4 12H2M12 22v-2M12 4V2"/></svg>
+        </div>
+        <h3 class="card-title">Market Analytics</h3>
+        <p class="card-body">Deep-dive analytical frameworks for Forex, Gold, and Index markets. Structured methodologies that cut through market noise to identify meaningful signals.</p>
+      </div>
+      <div class="card reveal delay-2">
+        <div class="card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3 class="card-title">Trading Automation</h3>
+        <p class="card-body">Automation solutions that systematize rule-based trading workflows, alert management, and data processing pipelines to reduce manual effort.</p>
+      </div>
+      <div class="card reveal delay-1">
+        <div class="card-icon blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        </div>
+        <h3 class="card-title">Algorithmic Systems</h3>
+        <p class="card-body">Rule-based trading system design grounded in backtesting, quantitative analysis, and systematic execution principles.</p>
+      </div>
+      <div class="card reveal delay-2">
+        <div class="card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+        </div>
+        <h3 class="card-title">Cloud Integrations</h3>
+        <p class="card-body">Enterprise-grade integrations on Azure connecting trading platforms, data providers, and analytical services into unified workflows.</p>
+      </div>
+      <div class="card reveal delay-3">
+        <div class="card-icon blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <h3 class="card-title">FinTech Development</h3>
+        <p class="card-body">Custom financial technology development — from data pipelines to analytical dashboards — built on modern software engineering principles.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHY VERIXA ════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">Why Verixa</div>
+      <h2 class="display-md" style="margin:1rem 0 1rem;">Technology Built for Traders, <span class="gradient-text">By an Engineer</span></h2>
+      <p class="body-md text-muted">Every decision at Verixa is grounded in engineering rigour, market reality, and a commitment to transparency.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card reveal" style="border-top:2px solid var(--green);">
+        <div style="font-size:1.5rem; margin-bottom:1rem;">🔧</div>
+        <h3 class="card-title">Built by an Engineer</h3>
+        <p class="card-body">Every tool is architected with software engineering discipline — clean architecture, tested logic, and maintainable code as a first principle.</p>
+      </div>
+      <div class="card reveal delay-1" style="border-top:2px solid var(--blue);">
+        <div style="font-size:1.5rem; margin-bottom:1rem;">💡</div>
+        <h3 class="card-title">Technology First</h3>
+        <p class="card-body">We lead with technology, not opinion. Our tools analyze, structure, and visualize — the decision always remains with the trader.</p>
+      </div>
+      <div class="card reveal delay-2" style="border-top:2px solid var(--green);">
+        <div style="font-size:1.5rem; margin-bottom:1rem;">📈</div>
+        <h3 class="card-title">Data Driven</h3>
+        <p class="card-body">Every feature is designed around observable market data, not speculation. Structured analysis over subjective narratives.</p>
+      </div>
+      <div class="card reveal delay-1">
+        <div style="font-size:1.5rem; margin-bottom:1rem;">🔍</div>
+        <h3 class="card-title">Transparent Methodology</h3>
+        <p class="card-body">What our indicators do, how they work, and their limitations — clearly communicated. No black boxes, no overpromising.</p>
+      </div>
+      <div class="card reveal delay-2">
+        <div style="font-size:1.5rem; margin-bottom:1rem;">🚀</div>
+        <h3 class="card-title">Continuous Innovation</h3>
+        <p class="card-body">Markets evolve. Our tools evolve with them. Regular updates and iterations driven by market research and user feedback.</p>
+      </div>
+      <div class="card reveal delay-3">
+        <div style="font-size:1.5rem; margin-bottom:1rem;">⚡</div>
+        <h3 class="card-title">Scalable Architecture</h3>
+        <p class="card-body">Built to scale from individual traders to institutional workflows without compromising performance or reliability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TECH STACK ════════════════════════════ -->
+<section class="section" style="background:var(--bg-primary);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">Technology Stack</div>
+      <h2 class="display-md" style="margin:1rem 0 1rem;">Powered by Modern Technology</h2>
+      <p class="body-md text-muted">A carefully selected stack of professional tools and platforms that underpin everything we build.</p>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:1rem; justify-content:center; max-width:860px; margin:0 auto;" class="reveal">
+      <div class="tech-pill"><span class="pill-icon">📜</span> Pine Script</div>
+      <div class="tech-pill"><span class="pill-icon">📊</span> TradingView</div>
+      <div class="tech-pill"><span class="pill-icon">🐍</span> Python</div>
+      <div class="tech-pill"><span class="pill-icon">☁️</span> Microsoft Azure</div>
+      <div class="tech-pill"><span class="pill-icon">🔗</span> REST APIs</div>
+      <div class="tech-pill"><span class="pill-icon">🌐</span> Cloud Technologies</div>
+      <div class="tech-pill"><span class="pill-icon">🤖</span> AI &amp; Machine Learning</div>
+      <div class="tech-pill"><span class="pill-icon">⚡</span> Real-time Data</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ════════════════════════════════════ -->
+<section class="section" style="position:relative; overflow:hidden;">
+  <div class="orb orb-green" style="width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-50%); opacity:0.12;"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="glass reveal" style="padding:clamp(2.5rem,6vw,5rem); text-align:center; max-width:780px; margin:0 auto;">
+      <div class="badge badge-green" style="margin-bottom:1.5rem;">Ready to start?</div>
+      <h2 class="display-lg" style="margin-bottom:1.25rem;">
+        Ready to Experience Trading Technology<br><span class="gradient-text">Built Differently?</span>
+      </h2>
+      <p class="body-lg text-muted" style="max-width:500px; margin:0 auto 2.5rem;">
+        Explore the indicator, learn the methodology, or reach out directly to the founder.
+      </p>
+      <div class="flex items-center justify-center gap-2" style="flex-wrap:wrap;">
+        <a href="indicator.html" class="btn btn-primary btn-lg">Explore Indicator</a>
+        <a href="founder.html" class="btn btn-outline btn-lg">Contact Founder</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════ -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="display:inline-flex; margin-bottom:0.5rem;">VERIXA<span class="logo-dot">.</span></a>
+        <p class="tagline">Built by Engineers. Driven by Markets.</p>
+        <div class="footer-socials">
+          <a href="https://www.linkedin.com/in/mohamedhanas" target="_blank" rel="noopener" class="footer-social-btn" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://www.instagram.com/the.pipsociety?igsh=Z25vYmlnbmc1anJz&utm_source=qr" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="mailto:mohamedhanaskkl@gmail.com" class="footer-social-btn" aria-label="Email">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="founder.html">Founder</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul>
+          <li><a href="indicator.html">Indicator</a></li>
+          <li><a href="indicator.html">Analytics</a></li>
+          <li><a href="indicator.html">Automation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="contact.html">Get in Touch</a></li>
+          <li><a href="founder.html">Meet the Founder</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Verixa. All rights reserved.</span>
+      <span>Engineering Smarter Financial Solutions</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
