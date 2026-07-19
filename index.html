@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
+<div id="page-fade" aria-hidden="true"></div>
 
 <!-- NAVBAR -->
 <nav id="navbar">
@@ -27,16 +28,18 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="indicator.html">Indicator</a></li>
-      <li><a href="ai-agent.html" class="nav-ai-link">AI Agent<span class="ai-dot"></span></a></li>
       <li><a href="founder.html">Founder</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
-    <div class="nav-cta">
-      <a href="indicator.html" class="btn btn-primary btn-sm">Explore Indicator</a>
+    <div class="nav-actions">
+      <a href="ai-agent.html" class="nav-ai-standalone"><span class="ai-dot"></span>AI Agent</a>
+      <div class="nav-cta">
+        <a href="indicator.html" class="btn btn-primary btn-sm">Explore Indicator</a>
+      </div>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
@@ -44,7 +47,6 @@
     <li><a href="index.html">Home</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="indicator.html">Indicator</a></li>
-    <li><a href="ai-agent.html" class="nav-ai-link">AI Agent<span class="ai-dot"></span></a></li>
     <li><a href="founder.html">Founder</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>

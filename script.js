@@ -9,18 +9,24 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 const isMobile = () => window.innerWidth < 768;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ─── PAGE FADE-IN ───────────────────────────── */
-// Set opacity before DOM is ready to prevent flash
-document.documentElement.style.opacity = '0';
-document.documentElement.style.transition = 'opacity 0.3s ease';
+/* ─── PAGE FADE (solid overlay — never reveals white) ────── */
+// #page-fade is a fixed, solid-colored div present at the top of every
+// page's <body>. It starts fully opaque and fades OUT once the page is
+// ready, and fades back IN before an internal navigation. Because it's
+// always a solid brand-color panel (never `opacity` on <html> itself),
+// the browser's white canvas is never exposed mid-transition.
+function hidePageFade() {
+  const overlay = $('#page-fade');
+  if (!overlay) return;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => overlay.classList.add('hide'));
+  });
+}
 
 /* ─── DOM READY ──────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Fade page in
-  requestAnimationFrame(() => {
-    document.documentElement.style.opacity = '1';
-  });
+  hidePageFade();
 
   initNavbar();
   initScrollReveal();
@@ -93,7 +99,7 @@ function initNavbar() {
 /* ─── ACTIVE NAV LINK ────────────────────────── */
 function setActiveNavLink() {
   const page = window.location.pathname.split('/').pop() || 'index.html';
-  $$('.nav-links a, #mobile-menu a').forEach(link => {
+  $$('.nav-links a, #mobile-menu a, .nav-actions a').forEach(link => {
     const href = link.getAttribute('href');
     const isActive =
       href === page ||
@@ -377,8 +383,9 @@ function initPageTransitions() {
       // Don't intercept if modifier keys held
       if (e.metaKey || e.ctrlKey || e.shiftKey) return;
       e.preventDefault();
-      document.documentElement.style.opacity = '0';
-      setTimeout(() => { window.location.href = href; }, 280);
+      const overlay = $('#page-fade');
+      if (overlay) overlay.classList.remove('hide');
+      setTimeout(() => { window.location.href = href; }, 260);
     });
   });
 }

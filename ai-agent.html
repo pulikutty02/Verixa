@@ -448,6 +448,7 @@
 <base target="_blank">
 </head>
 <body class="aiagent">
+<div id="page-fade" aria-hidden="true"></div>
 
 <nav id="navbar">
   <div class="nav-inner">
@@ -456,16 +457,18 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="indicator.html">Indicator</a></li>
-      <li><a href="ai-agent.html" class="nav-ai-link active">AI Agent<span class="ai-dot"></span></a></li>
       <li><a href="founder.html">Founder</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
-    <div class="nav-cta">
-      <a href="indicator.html" class="btn btn-primary btn-sm">Explore Indicator</a>
+    <div class="nav-actions">
+      <a href="ai-agent.html" class="nav-ai-standalone active"><span class="ai-dot"></span>AI Agent</a>
+      <div class="nav-cta">
+        <a href="indicator.html" class="btn btn-primary btn-sm">Explore Indicator</a>
+      </div>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
@@ -473,7 +476,6 @@
     <li><a href="index.html">Home</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="indicator.html">Indicator</a></li>
-    <li><a href="ai-agent.html" class="nav-ai-link active">AI Agent<span class="ai-dot"></span></a></li>
     <li><a href="founder.html">Founder</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
@@ -482,6 +484,7 @@
     <a href="founder.html" class="btn btn-outline">Contact Founder</a>
   </div>
 </div>
+
 
 <section class="aiagent-hero">
   <div class="orb orb-green" style="width:480px;height:480px;top:-160px;left:-160px;opacity:0.16;"></div>
@@ -602,10 +605,10 @@ const MARKETS = [
   { id:'NQ',     sym:'NAS100', desc:'Nasdaq Futures',  cat:'Indices', src:'yahoo', ySymbol:'NQ=F',       dec:1 },
   { id:'ES',     sym:'SPX500', desc:'S&P Futures',     cat:'Indices', src:'yahoo', ySymbol:'ES=F',       dec:1 },
   { id:'YM',     sym:'US30',   desc:'Dow Futures',     cat:'Indices', src:'yahoo', ySymbol:'YM=F',       dec:0 },
-  { id:'BTC',    sym:'BTC',    desc:'Bitcoin',         cat:'Crypto',  src:'cg',    gId:'bitcoin',        dec:0 },
-  { id:'ETH',    sym:'ETH',    desc:'Ethereum',        cat:'Crypto',  src:'cg',    gId:'ethereum',       dec:1 },
-  { id:'SOL',    sym:'SOL',    desc:'Solana',          cat:'Crypto',  src:'cg',    gId:'solana',         dec:2 },
-  { id:'BNB',    sym:'BNB',    desc:'BNB',             cat:'Crypto',  src:'cg',    gId:'binancecoin',    dec:1 },
+  { id:'BTC',    sym:'BTC',    desc:'Bitcoin',         cat:'Crypto',  src:'cg',    gId:'bitcoin',        binSymbol:'BTCUSDT',  dec:0 },
+  { id:'ETH',    sym:'ETH',    desc:'Ethereum',        cat:'Crypto',  src:'cg',    gId:'ethereum',       binSymbol:'ETHUSDT',  dec:1 },
+  { id:'SOL',    sym:'SOL',    desc:'Solana',          cat:'Crypto',  src:'cg',    gId:'solana',         binSymbol:'SOLUSDT',  dec:2 },
+  { id:'BNB',    sym:'BNB',    desc:'BNB',             cat:'Crypto',  src:'cg',    gId:'binancecoin',    binSymbol:'BNBUSDT',  dec:1 },
 ];
 const CATS = ['All','Metals','Energy','FX','Indices','Crypto'];
 const CAT_COLOR = { Metals:'#F59E0B', Energy:'#EF4444', FX:'#3B82F6', Indices:'#00D084', Crypto:'#A855F7' };
@@ -617,10 +620,10 @@ const NEWS_QUERY = {
 };
 
 const TIMEFRAMES = [
-  { id:'15m', label:'15M', full:'15 Minute',  yahoo:{interval:'15m', range:'5d'},  cg:{days:1,  agg:1}, tlUnit:'15-minute' },
-  { id:'1h',  label:'1H',  full:'1 Hour',     yahoo:{interval:'60m', range:'1mo'}, cg:{days:1,  agg:2}, tlUnit:'hourly' },
-  { id:'4h',  label:'4H',  full:'4 Hour',     yahoo:{interval:'60m', range:'3mo', agg:4}, cg:{days:30, agg:1}, tlUnit:'4-hour' },
-  { id:'1d',  label:'1D',  full:'Daily',      yahoo:{interval:'1d',  range:'1y'},  cg:{days:365,agg:1}, tlUnit:'daily' },
+  { id:'15m', label:'15M', full:'15 Minute',  yahoo:{interval:'15m', range:'5d'},  cg:{days:1,  agg:1}, binance:'15m', tlUnit:'15-minute' },
+  { id:'1h',  label:'1H',  full:'1 Hour',     yahoo:{interval:'60m', range:'1mo'}, cg:{days:1,  agg:2}, binance:'1h',  tlUnit:'hourly' },
+  { id:'4h',  label:'4H',  full:'4 Hour',     yahoo:{interval:'60m', range:'3mo', agg:4}, cg:{days:30, agg:1}, binance:'4h', tlUnit:'4-hour' },
+  { id:'1d',  label:'1D',  full:'Daily',      yahoo:{interval:'1d',  range:'1y'},  cg:{days:365,agg:1}, binance:'1d', tlUnit:'daily' },
 ];
 
 const CHECKS = [
@@ -1103,11 +1106,26 @@ async function fetchYahooCandles(ySymbol, interval, range){
   return raceUrls(urls, parse, 6000);
 }
 
-async function fetchCoinGeckoCandles(gId, days){
+async function fetchBinanceCandles(symbol, interval, limit){
+  const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
+  const res = await fetchWithTimeout(url, 6000);
+  if(!res.ok) throw new Error('binance unavailable');
+  const arr = await res.json();
+  if(!Array.isArray(arr) || arr.length < 5) throw new Error('binance empty');
+  return arr.map(k=>({ t:k[0], o:+k[1], h:+k[2], l:+k[3], c:+k[4] }));
+}
+
+async function fetchCoinGeckoCandles(gId, days, retriesLeft){
+  if(retriesLeft === undefined) retriesLeft = 2;
   const url = `https://api.coingecko.com/api/v3/coins/${gId}/ohlc?vs_currency=usd&days=${days}`;
   const res = await fetchWithTimeout(url, 6000);
+  if(res.status === 429 && retriesLeft > 0){
+    await new Promise(r => setTimeout(r, 700 + Math.random()*500));
+    return fetchCoinGeckoCandles(gId, days, retriesLeft - 1);
+  }
   if(!res.ok) throw new Error('Live data unavailable for this symbol right now');
   const arr = await res.json();
+  if(!Array.isArray(arr) || arr.length < 5) throw new Error('coingecko empty');
   return arr.map(a=>({ t:a[0], o:a[1], h:a[2], l:a[3], c:a[4] }));
 }
 
@@ -1129,8 +1147,15 @@ function aggregateCandles(candles, factor){
 
 async function getCandles(market, tf){
   if(market.src === 'cg'){
-    let candles = await fetchCoinGeckoCandles(market.gId, tf.cg.days);
-    return aggregateCandles(candles, tf.cg.agg);
+    const attempts = [
+      fetchBinanceCandles(market.binSymbol, tf.binance, 320),
+      fetchCoinGeckoCandles(market.gId, tf.cg.days).then(c => aggregateCandles(c, tf.cg.agg)),
+    ];
+    try{
+      return await Promise.any(attempts);
+    }catch(e){
+      throw new Error('Live data unavailable right now');
+    }
   }else{
     let candles = await fetchYahooCandles(market.ySymbol, tf.yahoo.interval, tf.yahoo.range);
     if(tf.yahoo.agg) candles = aggregateCandles(candles, tf.yahoo.agg);
