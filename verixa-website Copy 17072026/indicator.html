@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Indicator — VERIXA | The Verixa Intelligence Suite</title>
+<meta name="description" content="The Verixa Intelligence Suite — Verixa Finance's growing ecosystem of proprietary TradingView indicators. Version 1 introduces the Verixa 4C Model and the Multi-Symbol Confluence Scanner."/>
+<meta property="og:title" content="Indicator — VERIXA | The Verixa Intelligence Suite"/>
+<meta property="og:description" content="Professional TradingView indicators built by an engineer — structured market intelligence, not guesswork."/>
+<meta property="og:type" content="website"/>
+<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
+<meta name="theme-color" content="#050816"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+  /* Layout-only helpers for this page — no new colors, fonts, or component styles.
+     Everything below reuses the site's existing CSS variables (--green, --blue,
+     --border, --bg-primary, --text-subtle) so it inherits the real theme. */
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+  @media (max-width:980px){.grid-4{grid-template-columns:1fr 1fr;}}
+  @media (max-width:560px){.grid-4{grid-template-columns:1fr;}}
+
+  .product-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.75rem;}
+  @media (max-width:900px){.product-grid{grid-template-columns:1fr;}}
+
+  .product-card{display:flex;flex-direction:column;gap:1.1rem;}
+  .product-card-top{display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;}
+  .product-card-list{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem 1.1rem;padding:0;margin:0;list-style:none;}
+  @media (max-width:520px){.product-card-list{grid-template-columns:1fr;}}
+  .product-card-list li{display:flex;gap:0.5rem;align-items:flex-start;}
+  .product-card-list li::before{content:'—';flex:0 0 auto;}
+  .usage-list{display:flex;flex-direction:column;gap:0.55rem;padding:0;margin:0;list-style:none;}
+  .usage-list li{display:flex;gap:0.5rem;align-items:flex-start;}
+  .usage-list li::before{content:'▸';flex:0 0 auto;font-size:0.8rem;}
+  .block-label{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;}
+  .market-chip-row{display:flex;flex-wrap:wrap;gap:0.5rem;}
+  .market-chip{font-size:0.78rem;padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--border);}
+  .note-row{padding-top:0.9rem;border-top:1px solid var(--border);font-size:0.85rem;}
+
+  .roadmap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+  @media (max-width:900px){.roadmap-grid{grid-template-columns:1fr;}}
+  .roadmap-list{padding:0;margin:0;list-style:none;display:flex;flex-direction:column;gap:0.55rem;}
+</style>
+</head>
+<body>
+<div id="page-fade" aria-hidden="true"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">VERIXA<span class="logo-dot">.</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="indicator.html">Indicator</a></li>
+      <li><a href="founder.html">Founder</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="ai-agent.html" class="nav-ai-standalone"><span class="ai-dot"></span>AI Agent</a>
+      <div class="nav-cta">
+        <a href="contact.html" class="btn btn-primary btn-sm">Request Access</a>
+      </div>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="indicator.html">Indicator</a></li>
+    <li><a href="founder.html">Founder</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="mobile-cta">
+    <a href="contact.html" class="btn btn-primary">Request Access</a>
+    <a href="founder.html" class="btn btn-outline">Contact Founder</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero-section">
+  <canvas id="hero-canvas" class="hero-canvas"></canvas>
+  <div class="orb orb-green" style="width:500px;height:500px;top:-180px;left:-180px;"></div>
+  <div class="orb orb-blue"  style="width:420px;height:420px;bottom:-100px;right:-120px;"></div>
+  <div class="hero-fade"></div>
+  <div class="container hero-content">
+    <div class="hero-inner">
+      <div class="badge badge-green animate-fadeup mb-3">
+        <span>●</span> TradingView Indicator Ecosystem
+      </div>
+      <h1 class="display-xl animate-fadeup delay-1" style="margin-bottom:1.25rem;">
+        The Verixa<br>
+        <span class="gradient-text">Intelligence Suite</span>
+      </h1>
+      <p class="body-lg text-muted animate-fadeup delay-2" style="max-width:640px;margin:0 auto 2rem;">
+        The Verixa Intelligence Suite is Verixa Finance's growing ecosystem of proprietary TradingView indicators, engineered to deliver structured market intelligence through advanced analytical models. Our Version 1 release introduces two professional indicators designed to help traders analyze markets with greater clarity, confidence and consistency.
+      </p>
+      <div class="hero-cta animate-fadeup delay-3">
+        <a href="contact.html" class="btn btn-primary btn-lg">
+          Request Access
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="founder.html" class="btn btn-outline btn-lg">Contact Founder</a>
+      </div>
+      <div class="trust-row animate-fadeup delay-4 mt-4">
+        <span style="color:var(--text-subtle);font-size:0.8rem;display:flex;align-items:center;gap:5px;">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.8 3.6L14 5.4l-3 2.9.7 4.1L8 10.4l-3.7 2 .7-4.1L2 5.4l4.2-.8L8 1z" fill="var(--green)" opacity=".8"/></svg>
+          Verixa 4C Model — V1
+        </span>
+        <span style="color:var(--text-subtle);font-size:0.8rem;display:flex;align-items:center;gap:5px;">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.8 3.6L14 5.4l-3 2.9.7 4.1L8 10.4l-3.7 2 .7-4.1L2 5.4l4.2-.8L8 1z" fill="var(--blue)" opacity=".8"/></svg>
+          Multi-Symbol Confluence Scanner — V1
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="section" style="background:var(--bg-primary);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">Overview</div>
+      <h2 class="display-md" style="margin:0.85rem 0 0.85rem;">Technology-Driven Market Analysis</h2>
+      <p class="body-md text-muted">The Intelligence Suite has evolved from a single indicator into a growing collection of proprietary analytical tools, unified under one engineering philosophy. Every future indicator released by Verixa Finance becomes part of this same ecosystem, sharing a consistent design language and analytical standard inside TradingView.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card reveal">
+        <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <h3 class="card-title">TradingView Integration</h3>
+        <p class="card-body">Runs natively inside your TradingView workspace. No external apps, no plugins — every tool in the suite installs and works the same way.</p>
+      </div>
+      <div class="card reveal delay-1">
+        <div class="card-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h3 class="card-title">Advanced Analytical Models</h3>
+        <p class="card-body">Each indicator is built on its own analytical framework — from multi-confirmation signal engines to multi-symbol confluence detection.</p>
+      </div>
+      <div class="card reveal delay-2">
+        <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+        <h3 class="card-title">Unified, User-Friendly Design</h3>
+        <p class="card-body">Despite growing analytical depth, every product in the suite presents information cleanly, with a shared visual hierarchy across the ecosystem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRENT INDICATOR COLLECTION -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">Version 1</div>
+      <h2 class="display-md" style="margin:0.85rem 0 0.85rem;">Current Indicator Collection</h2>
+      <p class="body-md text-muted">Two purpose-built tools, engineered to work independently or side by side inside a single trading workflow.</p>
+    </div>
+
+    <div class="product-grid">
+
+      <!-- CARD 1 -->
+      <div class="card product-card reveal" style="border-top:2px solid var(--green);">
+        <div class="product-card-top">
+          <h3 class="card-title" style="font-size:1.3rem;">Verixa 4C Model — V1</h3>
+          <span class="badge badge-green">Flagship Indicator</span>
+        </div>
+        <p class="card-body">The Verixa 4C Model is Verixa Finance's proprietary multi-confirmation trading indicator, developed to identify high-probability Buy and Sell opportunities using a structured four-stage analytical framework. Rather than relying on a single technical condition, the indicator evaluates multiple confirmation layers before presenting a trading opportunity — encouraging disciplined execution and a focus on higher-quality market conditions.</p>
+
+        <div>
+          <div class="block-label text-muted">Features</div>
+          <ul class="product-card-list card-body">
+            <li>Proprietary Four-Step Confirmation Engine</li>
+            <li>Buy &amp; Sell Trade Signals</li>
+            <li>Trend Validation</li>
+            <li>Market Structure Analysis</li>
+            <li>TradingView Alert Support</li>
+            <li>Professional Chart Visualization</li>
+            <li>Clean User Interface</li>
+            <li>Forex, Gold (XAUUSD), Indices &amp; liquid markets</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="block-label text-muted">How Traders Use It</div>
+          <ul class="usage-list card-body">
+            <li>Identify structured opportunities before committing capital</li>
+            <li>Wait for confirmation across all four stages before entering</li>
+            <li>Avoid impulsive, single-signal trading decisions</li>
+            <li>Maintain consistency across sessions and instruments</li>
+            <li>Integrate the signal engine into an existing trading plan</li>
+          </ul>
+        </div>
+
+        <p class="note-row text-muted">Profitability depends on risk management, discipline and execution — not on any indicator alone.</p>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="card product-card reveal delay-1" style="border-top:2px solid var(--blue);">
+        <div class="product-card-top">
+          <h3 class="card-title" style="font-size:1.3rem;">Multi-Symbol Confluence Scanner — V1</h3>
+          <span class="badge" style="border-color:var(--blue);color:var(--blue);">Professional Scanner</span>
+        </div>
+        <p class="card-body">The Verixa Multi-Symbol Confluence Scanner allows traders to monitor multiple markets simultaneously from one professional dashboard. Instead of switching between numerous charts, traders receive an instant overview of trend alignment, directional bias and multi-timeframe confluence across selected instruments.</p>
+
+        <div>
+          <div class="block-label text-muted">Current Supported Markets</div>
+          <div class="market-chip-row">
+            <span class="market-chip text-muted">NQ Futures</span>
+            <span class="market-chip text-muted">ES Futures</span>
+            <span class="market-chip text-muted">Gold Futures (GC)</span>
+            <span class="market-chip text-muted">XAUUSD Spot Gold</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="block-label text-muted">Features</div>
+          <ul class="product-card-list card-body">
+            <li>Multi-Symbol Dashboard</li>
+            <li>Multi-Timeframe Confluence</li>
+            <li>Trend Bias Engine</li>
+            <li>Market Alignment Detection</li>
+            <li>Professional Dashboard Layout</li>
+            <li>Efficient Market Scanning Workflow</li>
+          </ul>
+        </div>
+
+        <p class="note-row text-muted">Helps traders prioritize markets showing stronger alignment, instead of manually analyzing every chart individually.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- KEY FEATURES -->
+<section class="section" style="background:var(--bg-primary);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">Key Features</div>
+      <h2 class="display-md" style="margin:0.85rem 0 0.85rem;">What the Indicator Does</h2>
+      <p class="body-md text-muted">Core capabilities shared across the Intelligence Suite's analytical engine.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card reveal">
+        <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h3 class="card-title">Market Structure Analysis</h3>
+        <p class="card-body">Detects and labels BOS and CHoCH events in real time, giving traders a clear structural map of market direction.</p>
+      </div>
+      <div class="card reveal delay-1">
+        <div class="card-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M19.07 19.07l-1.41-1.41M5.34 5.34L3.93 3.93M22 12h-2M4 12H2M12 22v-2M12 4V2"/></svg></div>
+        <h3 class="card-title">Trend Identification</h3>
+        <p class="card-body">Multi-timeframe trend bias calculation provides a composite view of directional pressure across time horizons simultaneously.</p>
+      </div>
+      <div class="card reveal delay-2">
+        <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <h3 class="card-title">Order Block Detection</h3>
+        <p class="card-body">Automatically identifies institutional order blocks and fair value gaps — high-probability reaction zones used as key reference points.</p>
+      </div>
+      <div class="card reveal delay-1">
+        <div class="card-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <h3 class="card-title">Smart Alerts</h3>
+        <p class="card-body">Configurable alert conditions notify you when key structural events occur, across email, mobile or webhook — no chart watching required.</p>
+      </div>
+      <div class="card reveal delay-2">
+        <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+        <h3 class="card-title">Data Visualization</h3>
+        <p class="card-body">Visual layers are designed to add information without cluttering the chart — clean presentation that fits existing workflows.</p>
+      </div>
+      <div class="card reveal delay-3">
+        <div class="card-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <h3 class="card-title">Continuous Improvement</h3>
+        <p class="card-body">Every tool in the suite evolves with ongoing market research and user feedback. Updates push directly to TradingView.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">How It Works</div>
+      <h2 class="display-md" style="margin:0.85rem 0 0.85rem;">Analytical Architecture</h2>
+      <p class="body-md text-muted">Each indicator in the suite is built around a layered analytical model that processes market data through multiple structured stages.</p>
+    </div>
+    <div class="grid-4">
+      <div class="card reveal">
+        <div class="card-title" style="color:var(--green);font-size:0.85rem;margin-bottom:0.85rem;">01</div>
+        <h3 class="card-title">Price Data</h3>
+        <p class="card-body">Raw OHLCV data is consumed from TradingView's data feed, preprocessed and structured for analysis across all instruments and timeframes.</p>
+      </div>
+      <div class="card reveal delay-1">
+        <div class="card-title" style="color:var(--blue);font-size:0.85rem;margin-bottom:0.85rem;">02</div>
+        <h3 class="card-title">Structure Detection</h3>
+        <p class="card-body">A rules-based engine processes price data to identify swing highs, swing lows and structural pivots — the foundation for higher-level analysis.</p>
+      </div>
+      <div class="card reveal delay-2">
+        <div class="card-title" style="color:var(--green);font-size:0.85rem;margin-bottom:0.85rem;">03</div>
+        <h3 class="card-title">Multi-Timeframe Analysis</h3>
+        <p class="card-body">Structural data from multiple timeframes is synthesized into a unified bias model, anchoring lower timeframe signals to higher timeframe context.</p>
+      </div>
+      <div class="card reveal delay-3">
+        <div class="card-title" style="color:var(--blue);font-size:0.85rem;margin-bottom:0.85rem;">04</div>
+        <h3 class="card-title">Visual Output</h3>
+        <p class="card-body">Results render as clearly labelled overlays with configurable alerts. The trader retains full decision-making authority at every stage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="section" style="background:var(--bg-primary);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow label">Roadmap</div>
+      <h2 class="display-md" style="margin:0.85rem 0 0.85rem;">The Future of the Verixa Intelligence Suite</h2>
+      <p class="body-md text-muted">Verixa Finance is committed to continuously expanding the Intelligence Suite through ongoing research and engineering.</p>
+    </div>
+
+    <div class="roadmap-grid">
+      <div class="card reveal" style="border-top:2px solid var(--green);">
+        <div class="block-label" style="color:var(--green);">Version 1 — Live</div>
+        <h3 class="card-title">Foundation</h3>
+        <ul class="roadmap-list card-body">
+          <li>✓ Verixa 4C Model</li>
+          <li>✓ Multi-Symbol Confluence Scanner</li>
+        </ul>
+      </div>
+      <div class="card reveal delay-1" style="border-top:2px solid var(--blue);">
+        <div class="block-label" style="color:var(--blue);">Version 2 — In Development</div>
+        <h3 class="card-title">Refinement</h3>
+        <ul class="roadmap-list card-body">
+          <li>Enhanced analytical engine</li>
+          <li>Performance optimizations</li>
+          <li>Expanded customization</li>
+          <li>Additional market intelligence</li>
+        </ul>
+      </div>
+      <div class="card reveal delay-2" style="border-top:1px solid var(--border);">
+        <div class="block-label text-muted">Future Releases</div>
+        <h3 class="card-title">Expansion</h3>
+        <ul class="roadmap-list card-body">
+          <li>New proprietary TradingView indicators</li>
+          <li>Institutional dashboards</li>
+          <li>AI-assisted analytical tools</li>
+          <li>Portfolio analytics &amp; strategy development tools</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section class="section-sm">
+  <div class="container">
+    <div class="card reveal" style="border-color:var(--border);">
+      <p class="card-body"><strong>Important Notice:</strong> The Verixa Intelligence Suite is a collection of analytical tools designed to assist market analysis. It does not constitute financial advice. All trading decisions are the sole responsibility of the trader. Markets carry inherent risk — never trade with capital you cannot afford to lose.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="position:relative;overflow:hidden;">
+  <div class="orb orb-green" style="width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.1;"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="glass reveal" style="text-align:center;max-width:740px;margin:0 auto;padding:clamp(2rem,5vw,4rem);">
+      <div class="badge badge-green" style="margin-bottom:1.25rem;">Ready for structured analysis?</div>
+      <h2 class="display-lg" style="margin-bottom:1rem;">
+        Ready for Structured<br><span class="gradient-text">Market Analysis?</span>
+      </h2>
+      <p class="body-lg text-muted" style="max-width:480px;margin:0 auto 2rem;">
+        Request access to the Verixa Intelligence Suite or reach out directly to learn more.
+      </p>
+      <div class="hero-cta">
+        <a href="contact.html" class="btn btn-primary btn-lg">Request Access</a>
+        <a href="founder.html" class="btn btn-outline btn-lg">Contact Founder</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<p class="container reveal body-md text-muted" style="text-align:center;padding-bottom:2rem;">
+  <strong style="color:var(--text-primary,#fff);">Version 1 is only the beginning.</strong><br>
+  Verixa Finance is building a complete ecosystem of intelligent analytical tools for modern traders.
+</p>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">VERIXA<span class="logo-dot">.</span></a>
+        <p class="tagline">Built by Engineers. Driven by Markets.</p>
+        <div class="footer-socials">
+          <a href="https://www.linkedin.com/in/mohamedhanas" target="_blank" rel="noopener" class="footer-social-btn" aria-label="LinkedIn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://www.instagram.com/verixafinance?igsh=Z25vYmlnbmc1anJz&utm_source=qr" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="mailto:mohamedhanaskkl@gmail.com" class="footer-social-btn" aria-label="Email">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="founder.html">Founder</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul>
+          <li><a href="indicator.html">Verixa 4C Model</a></li>
+          <li><a href="indicator.html">Confluence Scanner</a></li>
+          <li><a href="indicator.html">Full Suite</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="contact.html">Get in Touch</a></li>
+          <li><a href="founder.html">Meet the Founder</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Verixa. All rights reserved.</span>
+      <span>Engineering Smarter Financial Solutions</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
