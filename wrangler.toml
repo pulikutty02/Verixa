@@ -1,0 +1,29 @@
+name = "verixa-backend"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ── KV namespace for caching candles / news / macro data ──
+# Create with: wrangler kv namespace create VERIXA_CACHE
+# then paste the returned id below (and a second one for preview).
+[[kv_namespaces]]
+binding = "VERIXA_CACHE"
+id = "3d7ac0124cf948c48b0f6c210a365e4c"
+preview_id = "d0f1410abddc49908ecdfaf280a41adf"
+
+# ── Cron: keep hot-symbol caches warm + could later drive scheduled
+# Telegram digests. Runs every 10 minutes. Safe to remove if unwanted. ──
+[triggers]
+crons = ["*/10 * * * *"]
+
+# ── Secrets (never put real values here — set with `wrangler secret put NAME`) ──
+# TELEGRAM_BOT_TOKEN      required for the Telegram bot
+# FRED_API_KEY            optional, free at https://fred.stlouisfed.org/docs/api/api_key.html
+# FMP_API_KEY             optional, free tier at financialmodelingprep.com
+# FINNHUB_API_KEY         optional, free tier at finnhub.io
+# ALPHA_VANTAGE_API_KEY   optional, free tier at alphavantage.co
+# TWELVE_DATA_API_KEY     optional, free tier at twelvedata.com
+
+[vars]
+# Comma-separated list of origins allowed to call the JSON API.
+ALLOWED_ORIGINS = "https://verixafinance.com,https://www.verixafinance.com,http://localhost:8788,http://127.0.0.1:8788"

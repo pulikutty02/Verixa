@@ -593,52 +593,53 @@
 <script src="script.js"></script>
 <script>
 /* =========================================================
-   VERIXA AI AGENT v2.0 — Event-Driven Neural Market Intelligence
+   VERIXA AI AGENT v3.0 — Event-Driven Neural Market Intelligence
+   Now backed by the shared Verixa Cloudflare Worker API — the website
+   and the Telegram bot read from the exact same backend, data pipeline,
+   scoring engine and AI reasoning. No market data is fetched directly
+   from the browser anymore (no more CORS proxies).
    ========================================================= */
 
-const MARKETS = [
-  { id:'XAUUSD', sym:'XAUUSD', desc:'Spot Gold',      cat:'Metals',  src:'yahoo', ySymbol:'GC=F',       dec:2 },
-  { id:'CL',     sym:'WTI',    desc:'Crude Oil',       cat:'Energy',  src:'yahoo', ySymbol:'CL=F',       dec:2 },
-  { id:'DXY',    sym:'DXY',    desc:'Dollar Index',    cat:'FX',      src:'yahoo', ySymbol:'DX-Y.NYB',   dec:3 },
-  { id:'EURUSD', sym:'EURUSD', desc:'Euro / Dollar',   cat:'FX',      src:'yahoo', ySymbol:'EURUSD=X',   dec:5 },
-  { id:'GBPUSD', sym:'GBPUSD', desc:'Pound / Dollar',  cat:'FX',      src:'yahoo', ySymbol:'GBPUSD=X',   dec:5 },
-  { id:'NQ',     sym:'NAS100', desc:'Nasdaq Futures',  cat:'Indices', src:'yahoo', ySymbol:'NQ=F',       dec:1 },
-  { id:'ES',     sym:'SPX500', desc:'S&P Futures',     cat:'Indices', src:'yahoo', ySymbol:'ES=F',       dec:1 },
-  { id:'YM',     sym:'US30',   desc:'Dow Futures',     cat:'Indices', src:'yahoo', ySymbol:'YM=F',       dec:0 },
-  { id:'BTC',    sym:'BTC',    desc:'Bitcoin',         cat:'Crypto',  src:'cg',    gId:'bitcoin',        binSymbol:'BTCUSDT',  dec:0 },
-  { id:'ETH',    sym:'ETH',    desc:'Ethereum',        cat:'Crypto',  src:'cg',    gId:'ethereum',       binSymbol:'ETHUSDT',  dec:1 },
-  { id:'SOL',    sym:'SOL',    desc:'Solana',          cat:'Crypto',  src:'cg',    gId:'solana',         binSymbol:'SOLUSDT',  dec:2 },
-  { id:'BNB',    sym:'BNB',    desc:'BNB',             cat:'Crypto',  src:'cg',    gId:'binancecoin',    binSymbol:'BNBUSDT',  dec:1 },
-];
-const CATS = ['All','Metals','Energy','FX','Indices','Crypto'];
-const CAT_COLOR = { Metals:'#F59E0B', Energy:'#EF4444', FX:'#3B82F6', Indices:'#00D084', Crypto:'#A855F7' };
-const NEWS_QUERY = {
-  XAUUSD:'gold price XAUUSD', CL:'crude oil price WTI', DXY:'US dollar index DXY',
-  EURUSD:'EUR USD forex', GBPUSD:'GBP USD forex', NQ:'Nasdaq stock market',
-  ES:'S&P 500 stock market', YM:'Dow Jones stock market',
-  BTC:'Bitcoin price', ETH:'Ethereum price', SOL:'Solana price', BNB:'BNB price',
-};
+// Point this at your deployed worker (see DEPLOY.md). Example:
+// 'https://verixa-backend.<your-subdomain>.workers.dev'
+const VERIXA_API_BASE = window.VERIXA_API_BASE || 'https://verixa-backend.thepipsociety82.workers.dev';
 
-const TIMEFRAMES = [
-  { id:'15m', label:'15M', full:'15 Minute',  yahoo:{interval:'15m', range:'5d'},  cg:{days:1,  agg:1}, binance:'15m', tlUnit:'15-minute' },
-  { id:'1h',  label:'1H',  full:'1 Hour',     yahoo:{interval:'60m', range:'1mo'}, cg:{days:1,  agg:2}, binance:'1h',  tlUnit:'hourly' },
-  { id:'4h',  label:'4H',  full:'4 Hour',     yahoo:{interval:'60m', range:'3mo', agg:4}, cg:{days:30, agg:1}, binance:'4h', tlUnit:'4-hour' },
-  { id:'1d',  label:'1D',  full:'Daily',      yahoo:{interval:'1d',  range:'1y'},  cg:{days:365,agg:1}, binance:'1d', tlUnit:'daily' },
-];
+function apiUrl(path){ return VERIXA_API_BASE.replace(/\/$/,'') + path; }
+
+function fetchWithTimeout(url, ms){
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), ms);
+  return fetch(url, { cache:'no-store', signal:controller.signal }).finally(()=>clearTimeout(timer));
+}
+
+async function apiGet(path, timeoutMs=15000){
+  const res = await fetchWithTimeout(apiUrl(path), timeoutMs);
+  if(!res.ok){
+    let body = null;
+    try{ body = await res.json(); }catch(e){}
+    throw new Error(body?.error || `Verixa API error (${res.status})`);
+  }
+  return res.json();
+}
+
+const CAT_COLOR = { Metals:'#F59E0B', Energy:'#EF4444', FX:'#3B82F6', Indices:'#00D084', Crypto:'#A855F7' };
 
 const CHECKS = [
-  'Establishing neural handshake with market data feeds',
-  'Fetching OHLCV candle matrix',
-  'Computing EMA structure (9/21/50) with divergence detection',
-  'Calculating RSI momentum + hidden divergence scan',
-  'Measuring volatility regime (ATR + Bollinger Bandwidth)',
-  'Mapping key support/resistance + liquidity zones',
-  'Scanning live news sentiment + social volume',
-  'Computing correlation matrix + smart money flow',
+  'Establishing neural handshake with Verixa backend',
+  'Fetching OHLCV candle matrix (shared cache)',
+  'Computing EMA/RSI/MACD structure + BOS/CHoCH',
+  'Scanning Fair Value Gaps + order blocks',
+  'Reading multi-timeframe trend alignment',
+  'Pulling macro overlay (DXY / VIX / yields / Fear & Greed)',
+  'Deduplicating + classifying live news sentiment',
+  'Checking cross-asset relationships',
   'Scoring predictive edge & trade readiness',
-  'Synthesizing neural report with edge projection',
+  'Synthesizing institutional-grade report',
 ];
 
+let MARKETS = [];
+let CATS = ['All'];
+let TIMEFRAMES = [];
 let selectedMarket = null;
 let selectedTF = '1h';
 
@@ -654,7 +655,6 @@ function inSession(hourFloat, s){
   if (s.start < s.end) return hourFloat >= s.start && hourFloat < s.end;
   return hourFloat >= s.start || hourFloat < s.end;
 }
-
 function isForexWeekOpen(now){
   const day = now.getUTCDay();
   const hour = now.getUTCHours() + now.getUTCMinutes()/60;
@@ -736,9 +736,7 @@ function currentSessionLabel(){
 async function loadTicker(){
   const el = document.getElementById('miniTicker');
   try{
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true');
-    if(!res.ok) throw new Error('bad response');
-    const d = await res.json();
+    const d = await apiGet('/api/ticker', 8000);
     const rows = [
       ['BTC', d.bitcoin], ['ETH', d.ethereum], ['SOL', d.solana],
     ];
@@ -748,13 +746,13 @@ async function loadTicker(){
       const cls = chg >= 0 ? 'up' : 'down';
       const arrow = chg >= 0 ? '▲' : '▼';
       return `<span class="tk">${label} <b>$${v.usd.toLocaleString(undefined,{maximumFractionDigits:v.usd<10?4:0})}</b> <span class="${cls}">${arrow} ${Math.abs(chg).toFixed(2)}%</span></span>`;
-    }).join('') + '<span class="ticker-sep">|</span><span class="tk" style="color:var(--text-subtle);">Live Feed</span>';
+    }).join('') + '<span class="ticker-sep">|</span><span class="tk" style="color:var(--text-subtle);">Live Feed via Verixa Backend</span>';
   }catch(e){
     el.innerHTML = '<span class="tk" style="color:var(--text-subtle);">Live feed reconnecting…</span>';
   }
 }
 loadTicker();
-setInterval(loadTicker, 15000);
+setInterval(loadTicker, 20000);
 
 /* =========================================================
    EVENT-DRIVEN NEURAL CORE v2.0
@@ -988,8 +986,7 @@ const MarketCore = (() => {
 async function initMarketCore(){
   MarketCore.build();
   try{
-    const res = await fetchWithTimeout('https://api.coingecko.com/api/v3/global', 6000);
-    const json = await res.json();
+    const json = await apiGet('/api/global', 8000);
     const chg = json?.data?.market_cap_change_percentage_24h_usd ?? 0;
     const breadthVal = Math.max(5, Math.min(95, 50 + chg*6));
     const volVal = Math.max(10, Math.min(90, 30 + Math.abs(chg)*4));
@@ -1002,210 +999,85 @@ async function initMarketCore(){
 }
 initMarketCore();
 
-/* Build timeframe tabs */
-const tfWrap = document.getElementById('tfTabs');
-TIMEFRAMES.forEach(tf=>{
-  const btn = document.createElement('button');
-  btn.className = 'tf-tab' + (tf.id===selectedTF ? ' active' : '');
-  btn.textContent = tf.label;
-  btn.title = tf.full;
-  btn.addEventListener('click', ()=>{
-    selectedTF = tf.id;
-    document.querySelectorAll('.tf-tab').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-  });
-  tfWrap.appendChild(btn);
-});
+/* =========================================================
+   Bootstrap: load shared market/timeframe config from the backend,
+   then build the UI. This is the single source of truth — the website
+   no longer hardcodes its own market list, it asks the same backend
+   the Telegram bot uses.
+   ========================================================= */
+async function bootstrap(){
+  const grid = document.getElementById('marketGrid');
+  const catWrap = document.getElementById('catTabs');
+  const tfWrap = document.getElementById('tfTabs');
+  try{
+    const data = await apiGet('/api/markets', 10000);
+    MARKETS = data.markets;
+    CATS = data.categories;
+    TIMEFRAMES = data.timeframes;
+  }catch(e){
+    grid.innerHTML = `<div class="data-error"><div class="ico">⚠️</div><h3>Can't reach the Verixa backend</h3><p>Check that VERIXA_API_BASE is set correctly and the worker is deployed. (${e.message})</p></div>`;
+    return;
+  }
+  selectedTF = TIMEFRAMES.some(t=>t.id==='1h') ? '1h' : TIMEFRAMES[0].id;
 
-/* Build category tabs + market grid */
-let activeCat = 'All';
-const catWrap = document.getElementById('catTabs');
-CATS.forEach(c=>{
-  const btn = document.createElement('button');
-  btn.className = 'cat-tab' + (c==='All' ? ' active' : '');
-  btn.textContent = c;
-  btn.addEventListener('click', ()=>{
-    activeCat = c;
-    document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    renderMarketGrid();
-  });
-  catWrap.appendChild(btn);
-});
-
-const grid = document.getElementById('marketGrid');
-function renderMarketGrid(){
-  grid.innerHTML = '';
-  const forexOpen = isForexWeekOpen(new Date());
-  MARKETS.filter(m => activeCat==='All' || m.cat===activeCat).forEach(m=>{
-    const card = document.createElement('button');
-    const closed = m.src!=='cg' && !forexOpen;
-    card.className = 'market-card' + (selectedMarket===m.id ? ' selected' : '') + (closed ? ' market-closed' : '');
-    card.innerHTML = `<div class="catdot" style="background:${CAT_COLOR[m.cat]}"></div><div class="sym">${m.sym}</div><div class="desc">${m.desc}</div>${closed ? '<div class="closed-tag">Closed</div>' : ''}`;
-    card.addEventListener('click', ()=>{
-      document.querySelectorAll('.market-card').forEach(c=>c.classList.remove('selected'));
-      card.classList.add('selected');
-      selectedMarket = m.id;
-      document.getElementById('analyzeBtn').classList.add('enabled');
+  TIMEFRAMES.forEach(tf=>{
+    const btn = document.createElement('button');
+    btn.className = 'tf-tab' + (tf.id===selectedTF ? ' active' : '');
+    btn.textContent = tf.label;
+    btn.title = tf.full;
+    btn.addEventListener('click', ()=>{
+      selectedTF = tf.id;
+      document.querySelectorAll('.tf-tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
     });
-    grid.appendChild(card);
+    tfWrap.appendChild(btn);
+  });
+
+  let activeCat = 'All';
+  CATS.forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'cat-tab' + (c==='All' ? ' active' : '');
+    btn.textContent = c;
+    btn.addEventListener('click', ()=>{
+      activeCat = c;
+      document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderMarketGrid();
+    });
+    catWrap.appendChild(btn);
+  });
+
+  function renderMarketGrid(){
+    grid.innerHTML = '';
+    const forexOpen = isForexWeekOpen(new Date());
+    MARKETS.filter(m => activeCat==='All' || m.cat===activeCat).forEach(m=>{
+      const card = document.createElement('button');
+      const closed = m.src!=='cg' && !forexOpen;
+      card.className = 'market-card' + (selectedMarket===m.id ? ' selected' : '') + (closed ? ' market-closed' : '');
+      card.innerHTML = `<div class="catdot" style="background:${CAT_COLOR[m.cat]||'#00D084'}"></div><div class="sym">${m.sym}</div><div class="desc">${m.desc}</div>${closed ? '<div class="closed-tag">Closed</div>' : ''}`;
+      card.addEventListener('click', ()=>{
+        document.querySelectorAll('.market-card').forEach(c=>c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedMarket = m.id;
+        document.getElementById('analyzeBtn').classList.add('enabled');
+      });
+      grid.appendChild(card);
+    });
+  }
+  renderMarketGrid();
+
+  document.getElementById('analyzeBtn').addEventListener('click', ()=>{
+    if(!selectedMarket) return;
+    showScreen('analyzing');
+    runAnalysis(selectedMarket, selectedTF);
   });
 }
-renderMarketGrid();
-
-document.getElementById('analyzeBtn').addEventListener('click', ()=>{
-  if(!selectedMarket) return;
-  showScreen('analyzing');
-  runAnalysis(selectedMarket, selectedTF);
-});
 document.getElementById('backBtn').addEventListener('click', ()=> showScreen('select'));
+bootstrap();
 
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
-}
-
-/* Data fetching */
-function fetchWithTimeout(url, ms){
-  const controller = new AbortController();
-  const timer = setTimeout(()=>controller.abort(), ms);
-  return fetch(url, { cache:'no-store', signal:controller.signal }).finally(()=>clearTimeout(timer));
-}
-async function raceUrls(urls, parseFn, timeoutMs){
-  const attempts = urls.map(url =>
-    fetchWithTimeout(url, timeoutMs)
-      .then(res => { if(!res.ok) throw new Error('bad status'); return res; })
-      .then(parseFn)
-      .then(parsed => { if(!parsed) throw new Error('empty parse'); return parsed; })
-  );
-  try{
-    return await Promise.any(attempts);
-  }catch(e){
-    throw new Error('Live data unavailable right now');
-  }
-}
-
-async function fetchYahooCandles(ySymbol, interval, range){
-  const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySymbol)}?interval=${interval}&range=${range}`;
-  const urls = [
-    target,
-    'https://corsproxy.io/?url=' + encodeURIComponent(target),
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(target),
-  ];
-  const parse = async (res) => {
-    const json = await res.json();
-    const result = json && json.chart && json.chart.result && json.chart.result[0];
-    if(!result) return null;
-    const ts = result.timestamp || [];
-    const q = result.indicators.quote[0];
-    const candles = ts.map((t,i)=>({
-      t: t*1000, o:q.open[i], h:q.high[i], l:q.low[i], c:q.close[i]
-    })).filter(c => c.c != null && c.h != null && c.l != null);
-    return candles.length > 5 ? candles : null;
-  };
-  return raceUrls(urls, parse, 6000);
-}
-
-async function fetchBinanceCandles(symbol, interval, limit){
-  const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
-  const res = await fetchWithTimeout(url, 6000);
-  if(!res.ok) throw new Error('binance unavailable');
-  const arr = await res.json();
-  if(!Array.isArray(arr) || arr.length < 5) throw new Error('binance empty');
-  return arr.map(k=>({ t:k[0], o:+k[1], h:+k[2], l:+k[3], c:+k[4] }));
-}
-
-async function fetchCoinGeckoCandles(gId, days, retriesLeft){
-  if(retriesLeft === undefined) retriesLeft = 2;
-  const url = `https://api.coingecko.com/api/v3/coins/${gId}/ohlc?vs_currency=usd&days=${days}`;
-  const res = await fetchWithTimeout(url, 6000);
-  if(res.status === 429 && retriesLeft > 0){
-    await new Promise(r => setTimeout(r, 700 + Math.random()*500));
-    return fetchCoinGeckoCandles(gId, days, retriesLeft - 1);
-  }
-  if(!res.ok) throw new Error('Live data unavailable for this symbol right now');
-  const arr = await res.json();
-  if(!Array.isArray(arr) || arr.length < 5) throw new Error('coingecko empty');
-  return arr.map(a=>({ t:a[0], o:a[1], h:a[2], l:a[3], c:a[4] }));
-}
-
-function aggregateCandles(candles, factor){
-  if(factor<=1) return candles;
-  const out = [];
-  for(let i=0;i<candles.length;i+=factor){
-    const chunk = candles.slice(i, i+factor);
-    if(!chunk.length) continue;
-    out.push({
-      t: chunk[0].t, o: chunk[0].o,
-      h: Math.max(...chunk.map(c=>c.h)),
-      l: Math.min(...chunk.map(c=>c.l)),
-      c: chunk[chunk.length-1].c,
-    });
-  }
-  return out;
-}
-
-async function getCandles(market, tf){
-  if(market.src === 'cg'){
-    const attempts = [
-      fetchBinanceCandles(market.binSymbol, tf.binance, 320),
-      fetchCoinGeckoCandles(market.gId, tf.cg.days).then(c => aggregateCandles(c, tf.cg.agg)),
-    ];
-    try{
-      return await Promise.any(attempts);
-    }catch(e){
-      throw new Error('Live data unavailable right now');
-    }
-  }else{
-    let candles = await fetchYahooCandles(market.ySymbol, tf.yahoo.interval, tf.yahoo.range);
-    if(tf.yahoo.agg) candles = aggregateCandles(candles, tf.yahoo.agg);
-    return candles;
-  }
-}
-
-/* News & sentiment */
-const BULLISH_WORDS = ['rally','rallies','surge','surges','jump','jumps','gain','gains','gaining','rise','rises','rising','soar','soars','higher','strength','strengthens','beat','beats','optimism','optimistic','buy','buying','bullish','record high','climb','climbs','rebound','rebounds','upbeat','outperform'];
-const BEARISH_WORDS = ['fall','falls','falling','drop','drops','plunge','plunges','decline','declines','slump','slumps','lower','weak','weakens','weakness','miss','misses','sell','selling','bearish','record low','tumble','tumbles','slide','slides','crash','crashes','pressure','pressured','downbeat','underperform','recession','fears'];
-
-function scoreHeadline(title){
-  const t = title.toLowerCase();
-  let score = 0;
-  BULLISH_WORDS.forEach(w => { if(t.includes(w)) score += 1; });
-  BEARISH_WORDS.forEach(w => { if(t.includes(w)) score -= 1; });
-  return score;
-}
-
-async function fetchNews(query){
-  const target = `https://news.google.com/rss/search?q=${encodeURIComponent(query + ' when:2d')}&hl=en-US&gl=US&ceid=US:en`;
-  const urls = [
-    target,
-    'https://corsproxy.io/?url=' + encodeURIComponent(target),
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(target),
-  ];
-  const parse = async (res) => {
-    const xmlText = await res.text();
-    const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
-    const items = [...xml.querySelectorAll('item')].slice(0, 6);
-    if(!items.length) return null;
-    return items.map(it => {
-      const rawTitle = (it.querySelector('title')?.textContent) || '';
-      const parts = rawTitle.split(' - ');
-      const source = parts.length > 1 ? parts.pop() : '';
-      const title = parts.join(' - ');
-      return {
-        title,
-        source,
-        link: it.querySelector('link')?.textContent || '#',
-        pubDate: it.querySelector('pubDate')?.textContent || '',
-        score: scoreHeadline(rawTitle),
-      };
-    });
-  };
-  try{
-    return await raceUrls(urls, parse, 5000);
-  }catch(e){
-    return [];
-  }
 }
 
 function relativeTime(pubDate){
@@ -1219,217 +1091,9 @@ function relativeTime(pubDate){
   return `${Math.round(diffH/24)}d ago`;
 }
 
-function summarizeNews(headlines){
-  if(!headlines.length) return { label:'neutral', score:50, count:0 };
-  const total = headlines.reduce((a,h)=>a+h.score,0);
-  const avg = total / headlines.length;
-  const score = Math.max(0, Math.min(100, 50 + avg*18));
-  const label = score >= 58 ? 'bull' : score <= 42 ? 'bear' : 'neutral';
-  return { label, score, count: headlines.length };
-}
-
-/* Indicators */
-function emaSeries(values, period){
-  const k = 2/(period+1);
-  const out = [];
-  values.forEach((v,i)=>{ out.push(i===0 ? v : v*k + out[i-1]*(1-k)); });
-  return out;
-}
-function rsiSeries(closes, period){
-  period = period || 14;
-  const out = new Array(Math.min(period, closes.length)).fill(50);
-  let avgGain=0, avgLoss=0;
-  for(let i=1;i<=period && i<closes.length;i++){
-    const diff = closes[i]-closes[i-1];
-    avgGain += diff>0 ? diff : 0;
-    avgLoss += diff<0 ? -diff : 0;
-  }
-  avgGain/=period; avgLoss/=period;
-  for(let i=period+1;i<closes.length;i++){
-    const diff = closes[i]-closes[i-1];
-    const gain = diff>0?diff:0, loss = diff<0?-diff:0;
-    avgGain = (avgGain*(period-1)+gain)/period;
-    avgLoss = (avgLoss*(period-1)+loss)/period;
-    const rs = avgLoss===0 ? 100 : avgGain/avgLoss;
-    out.push(100 - (100/(1+rs)));
-  }
-  return out;
-}
-function atrValue(candles, period){
-  period = period || 14;
-  const trs = [];
-  for(let i=1;i<candles.length;i++){
-    const c=candles[i], p=candles[i-1];
-    trs.push(Math.max(c.h-c.l, Math.abs(c.h-p.c), Math.abs(c.l-p.c)));
-  }
-  const last = trs.slice(-period);
-  if(!last.length) return 0;
-  return last.reduce((a,b)=>a+b,0)/last.length;
-}
-function bollingerBandwidth(candles, period=20){
-  if(candles.length < period) return 0;
-  const slice = candles.slice(-period);
-  const mean = slice.reduce((a,c)=>a+c.c,0)/period;
-  const variance = slice.reduce((a,c)=>a+Math.pow(c.c-mean,2),0)/period;
-  const std = Math.sqrt(variance);
-  return (std * 2) / mean * 100;
-}
-function detectDivergence(candles, rsiArr){
-  const len = Math.min(candles.length, rsiArr.length);
-  if(len < 10) return 'none';
-  const priceHighs = [], rsiHighs = [];
-  for(let i=2;i<len-2;i++){
-    if(candles[i].c > candles[i-1].c && candles[i].c > candles[i-2].c && candles[i].c > candles[i+1].c && candles[i].c > candles[i+2].c){
-      priceHighs.push({idx:i, val:candles[i].c});
-    }
-  }
-  for(let i=2;i<len-2;i++){
-    if(rsiArr[i] > rsiArr[i-1] && rsiArr[i] > rsiArr[i-2] && rsiArr[i] > rsiArr[i+1] && rsiArr[i] > rsiArr[i+2]){
-      rsiHighs.push({idx:i, val:rsiArr[i]});
-    }
-  }
-  if(priceHighs.length >= 2 && rsiHighs.length >= 2){
-    const ph1 = priceHighs[priceHighs.length-2], ph2 = priceHighs[priceHighs.length-1];
-    const rh1 = rsiHighs[rsiHighs.length-2], rh2 = rsiHighs[rsiHighs.length-1];
-    if(ph2.val > ph1.val && rh2.val < rh1.val) return 'bearish';
-    if(ph2.val < ph1.val && rh2.val > rh1.val) return 'bullish';
-  }
-  return 'none';
-}
-
 function fmt(n, dec){
   if(n==null || isNaN(n)) return '—';
   return n.toLocaleString(undefined, { minimumFractionDigits:dec, maximumFractionDigits:dec });
-}
-
-/* Build report */
-function buildReport(candles, market, tf, news, marketClosed){
-  const closes = candles.map(c=>c.c);
-  const ema9 = emaSeries(closes, 9);
-  const ema21 = emaSeries(closes, 21);
-  const ema50 = emaSeries(closes, Math.min(50, closes.length));
-  const rsiArr = rsiSeries(closes, 14);
-
-  const lastClose = closes[closes.length-1];
-  const prevClose = closes[Math.max(0, closes.length-2)];
-  const lastEma9 = ema9[ema9.length-1];
-  const lastEma21 = ema21[ema21.length-1];
-  const lastEma50 = ema50[ema50.length-1];
-  const lastRsi = rsiArr[rsiArr.length-1];
-  const atrVal = atrValue(candles, 14);
-  const bbw = bollingerBandwidth(candles, 20);
-  const divergence = detectDivergence(candles, rsiArr);
-
-  const lookback = candles.slice(-20);
-  const swingHigh = Math.max(...lookback.map(c=>c.h));
-  const swingLow = Math.min(...lookback.map(c=>c.l));
-  const pivot = (swingHigh + swingLow + lastClose) / 3;
-  const resistance = +(pivot + (swingHigh - swingLow) * 0.5).toFixed(6);
-  const support = +(pivot - (swingHigh - swingLow) * 0.5).toFixed(6);
-
-  let structureScore = 50;
-  if(lastEma9 > lastEma21 && lastEma21 > lastEma50) structureScore = 82;
-  else if(lastEma9 < lastEma21 && lastEma21 < lastEma50) structureScore = 18;
-  else if(lastEma9 > lastEma21) structureScore = 62;
-  else if(lastEma9 < lastEma21) structureScore = 38;
-
-  const momentumScore = Math.max(0, Math.min(100, lastRsi));
-
-  const backIdx = Math.max(0, closes.length - 10);
-  const pctMove = ((lastClose - closes[backIdx]) / closes[backIdx]) * 100;
-  const priceActionScore = Math.max(0, Math.min(100, 50 + pctMove * 10));
-
-  const volPct = (atrVal / lastClose) * 100;
-  let risk = 'MEDIUM';
-  if(volPct < 0.25) risk = 'LOW'; else if(volPct > 0.9) risk = 'HIGH';
-  const volatilityScoreForRisk = Math.max(6, Math.min(94, Math.round(volPct * 55)));
-
-  const newsSummary = summarizeNews(news);
-
-  const combined = structureScore*0.45 + momentumScore*0.28 + priceActionScore*0.14 + newsSummary.score*0.13;
-  let bias = 'NEUTRAL';
-  if(combined >= 58) bias = 'BULLISH';
-  else if(combined <= 42) bias = 'BEARISH';
-
-  const confidence = Math.max(38, Math.min(95, Math.round(40 + Math.abs(combined-50)*1.15)));
-  const readinessBase = confidence * (risk==='HIGH' ? 0.78 : risk==='LOW' ? 1.05 : 0.92) * (marketClosed ? 0.6 : 1);
-  const readiness = Math.max(15, Math.min(97, Math.round(readinessBase)));
-
-  const structLabel = lastEma9 > lastEma21 ? 'bull' : lastEma9 < lastEma21 ? 'bear' : 'neutral';
-  const momLabel = lastRsi >= 55 ? 'bull' : lastRsi <= 45 ? 'bear' : 'neutral';
-  const volLabel = risk === 'HIGH' ? 'bear' : risk === 'LOW' ? 'bull' : 'neutral';
-  const paLabel = pctMove > 0.15 ? 'bull' : pctMove < -0.15 ? 'bear' : 'neutral';
-  const newsLabel = newsSummary.label;
-  const divLabel = divergence === 'bullish' ? 'bull' : divergence === 'bearish' ? 'bear' : 'neutral';
-
-  const why = [];
-  why.push(`EMA9 is ${lastEma9>lastEma21?'above':'below'} EMA21 — short-term structure is ${structLabel==='bull'?'constructive':structLabel==='bear'?'weak':'mixed'} on the ${tf.full} chart.`);
-  why.push(`RSI(14) reads ${lastRsi.toFixed(1)} — ${lastRsi>=70?'stretched, watch for exhaustion':lastRsi<=30?'oversold, watch for a bounce':lastRsi>=55?'momentum leans bullish':lastRsi<=45?'momentum leans bearish':'momentum is balanced'}.`);
-  if(divergence !== 'none'){
-    why.push(`${divergence.toUpperCase()} divergence detected between price and RSI — potential reversal signal.`);
-  }
-  why.push(`Price has moved ${pctMove>=0?'+':''}${pctMove.toFixed(2)}% over the last ${backIdx===0?closes.length:10} candles.`);
-  why.push(`Bollinger Bandwidth is ${bbw.toFixed(2)}% — ${bbw>15?'expanding, expect volatility':bbw<5?'compressed, watch for breakout':'normal range'}.`);
-  why.push(`Volatility (ATR) is ${volPct.toFixed(2)}% of price — ${risk.toLowerCase()} risk regime for position sizing.`);
-  why.push(`Price is trading ${lastClose>=pivot?'above':'below'} the ${lookback.length}-candle pivot (${fmt(pivot,market.dec)}), between support ${fmt(support,market.dec)} and resistance ${fmt(resistance,market.dec)}.`);
-  if(newsSummary.count > 0){
-    why.push(`Live news skews ${newsLabel==='bull'?'positive':newsLabel==='bear'?'negative':'mixed/neutral'} across the last ${newsSummary.count} headlines scanned.`);
-  } else {
-    why.push(`No fresh headlines were retrieved for this scan — news sentiment carries no weight in this report.`);
-  }
-  if(marketClosed){
-    why.push(`This market is closed for the weekend — figures reflect the last traded candle, not live intraday movement.`);
-  }
-
-  const tlSource = candles.slice(-6);
-  const timeline = tlSource.map((c,i)=>{
-    const prev = tlSource[i-1];
-    const chg = prev ? ((c.c - prev.c)/prev.c)*100 : 0;
-    const d = new Date(c.t);
-    const label = d.toUTCString().slice(17,22);
-    let event = i===0 ? 'Window opened' : (chg>=0 ? 'Pushed higher' : 'Pulled back');
-    let effect = i===0 ? `Open near ${fmt(c.o,market.dec)}` : `${chg>=0?'+':''}${chg.toFixed(2)}% vs prior candle`;
-    return { time: label+' UTC', event, effect };
-  });
-  timeline.push({ time:'NOW', event:`Overall bias: ${bias}`, effect:`Confidence ${confidence}% · ${tf.full} timeframe` });
-
-  const invalidation = bias==='BULLISH' ? support - atrVal*0.5 : resistance + atrVal*0.5;
-  const target = bias==='BULLISH' ? resistance + (resistance-pivot) : support - (pivot-support);
-  const rr = bias !== 'NEUTRAL' ? Math.abs((target - lastClose) / (lastClose - invalidation)) : 0;
-
-  let coach;
-  if(marketClosed){
-    coach = `This market is closed for the weekend, so treat this as <strong>prep, not a live signal</strong>. Structure and momentum from the last active session lean ${bias.toLowerCase()}, but confirm on the open before acting — the first candles after reopen can gap or fake out. `;
-  } else if(bias==='BULLISH'){
-    coach = `Structure, momentum and live news all feed into a <strong>${confidence}% confidence</strong> bullish read. ${divergence==='bullish'?'Bullish divergence adds conviction. ':''}Rather than chasing the current candle, a pullback toward ${fmt(pivot,market.dec)}–${fmt(support,market.dec)} would offer a cleaner entry. A break below <strong>${fmt(invalidation,market.dec)}</strong> would invalidate this bias — size positions so that level doesn't threaten the account. ${rr>0?`Risk/reward ratio: ~${rr.toFixed(1)}:1.`:' '}`;
-  } else if(bias==='BEARISH'){
-    coach = `Structure, momentum and live news all feed into a <strong>${confidence}% confidence</strong> bearish read. ${divergence==='bearish'?'Bearish divergence adds conviction. ':''}Watch for relief pushes into ${fmt(pivot,market.dec)}–${fmt(resistance,market.dec)} as potential re-entry zones rather than selling into weakness. A break above <strong>${fmt(invalidation,market.dec)}</strong> would invalidate this bias. ${rr>0?`Risk/reward ratio: ~${rr.toFixed(1)}:1.`:' '}`;
-  } else {
-    coach = `Signals are mixed — structure, momentum, price action and news are not in agreement, so <strong>trade readiness is low (${readiness}%)</strong>. This is a range/rotation environment between roughly ${fmt(support,market.dec)} and ${fmt(resistance,market.dec)}; waiting for a decisive break is more defensible than forcing a direction. `;
-  }
-  coach += `Current risk regime: <strong>${risk}</strong> volatility. This is generated analysis, not financial advice — always confirm with your own risk plan.`;
-
-  return {
-    name: market.sym, desc: market.desc, bias, confidence, readiness, risk,
-    session: currentSessionLabel(), marketClosed,
-    lastClose, prevClose,
-    opinions: { structure:structLabel, momentum:momLabel, volatility:volLabel, priceaction:paLabel, news:newsLabel, divergence:divLabel },
-    why,
-    scores: {
-      structure: Math.round(structureScore),
-      momentum: Math.round(momentumScore),
-      priceAction: Math.round(priceActionScore),
-      newsSentiment: Math.round(newsSummary.score),
-      confidence: confidence,
-      volatilityRisk: volatilityScoreForRisk,
-    },
-    levels: { support, resistance, pivot, invalidation, target },
-    timeline,
-    coach,
-    news,
-    dec: market.dec,
-    edge: { divergence, bbw, rr: rr > 0 ? rr.toFixed(1) : 'N/A' }
-  };
 }
 
 function biasColor(b){
@@ -1443,7 +1107,9 @@ function riskColor(r){
   return { c:'var(--neon-amber)', bg:'rgba(255,184,0,0.12)' };
 }
 
-/* Run analysis */
+/* Run analysis — fetches the complete report from the shared backend.
+   Both the website and the Telegram bot call the exact same
+   buildFullReport() function server-side, so results never diverge. */
 async function runAnalysis(marketId, tfId){
   const market = MARKETS.find(m=>m.id===marketId);
   const tf = TIMEFRAMES.find(t=>t.id===tfId);
@@ -1463,9 +1129,8 @@ async function runAnalysis(marketId, tfId){
 
   let i = 0;
   const marketClosed = market.src !== 'cg' && !isForexWeekOpen(new Date());
-  const candlesPromise = getCandles(market, tf).catch(err => ({ __error: err }));
-  const newsPromise = fetchNews(NEWS_QUERY[market.id] || market.desc).catch(()=>[]);
-  const dataPromise = Promise.all([candlesPromise, newsPromise]);
+  const reportPromise = apiGet(`/api/analyze?market=${encodeURIComponent(marketId)}&tf=${encodeURIComponent(tfId)}`, 20000)
+    .catch(err => ({ __error: err }));
 
   const FAST_STEPS = 6;
   function markDone(idx){ items[idx].classList.remove('spin'); items[idx].classList.add('done'); MarketCore.tick(); }
@@ -1488,7 +1153,7 @@ async function runAnalysis(marketId, tfId){
   setTimeout(stepFast, 150);
 
   async function waitForData(){
-    const [result, news] = await dataPromise;
+    const result = await reportPromise;
     markDone(i); i++;
     updateProgress();
     setTimeout(()=>{
@@ -1498,20 +1163,19 @@ async function runAnalysis(marketId, tfId){
         markDone(i); i++;
         updateProgress();
         markSpin(i);
-        setTimeout(()=> finish(result, news), 240);
+        setTimeout(()=> finish(result), 240);
       }, 220);
     }, 180);
   }
 
-  function finish(result, news){
+  function finish(result){
     markDone(i);
     if(progressBar) progressBar.style.width = '100%';
     MarketCore.setActive(false);
     if(result && result.__error){
       renderError(market, tf);
     } else {
-      const report = buildReport(result, market, tf, news, marketClosed);
-      renderReport(report);
+      renderReport(result, marketClosed);
     }
     showScreen('report');
   }
@@ -1522,75 +1186,77 @@ function renderError(market, tf){
     <div class="data-error">
       <div class="ico">⚠️</div>
       <h3>Live data unavailable right now</h3>
-      <p>We couldn't reach live market data for ${market.sym} on the ${tf.full} timeframe. This can happen if the data provider is rate-limiting or your network is blocking the request. Try again in a moment.</p>
+      <p>We couldn't reach the Verixa backend for ${market.sym} on the ${tf.full} timeframe. This can happen if the data provider is rate-limiting or the worker is unreachable. Try again in a moment.</p>
       <button class="btn btn-primary" onclick="showScreen('select')">Back to Markets</button>
     </div>`;
 }
 
-function renderReport(d){
+/* Renders the full report returned by GET /api/analyze — same JSON shape
+   the Telegram bot's report is built from, just rendered as HTML here. */
+function renderReport(d, marketClosed){
   const bc = biasColor(d.bias);
   const rc = riskColor(d.risk);
   const arrow = d.bias==='BULLISH' ? '▲' : d.bias==='BEARISH' ? '▼' : '●';
-  const chg = d.prevClose ? ((d.lastClose-d.prevClose)/d.prevClose)*100 : 0;
+  const dec = d.market.dec;
+  const chg = d.changePct;
   const chgCls = chg>=0 ? 'up' : 'down';
 
-  const oppRow = ['structure','momentum','volatility','priceaction','news','divergence'].map(k=>{
-    const val = d.opinions[k];
-    const label = val==='bull' ? 'Bullish' : val==='bear' ? 'Bearish' : 'Neutral';
-    const titleMap = { structure:'EMA Structure', momentum:'RSI Momentum', volatility:'Volatility', priceaction:'Price Action', news:'News Sentiment', divergence:'Divergence' };
-    return `<div class="opinion-card"><div class="otitle">${titleMap[k]}</div><div class="oval ${val}">${label}</div></div>`;
-  }).join('');
-
-  const whyList = d.why.map(w=>`<li>${w}</li>`).join('');
-
   const scoreRows = [
-    ['Structure', d.scores.structure],
-    ['Momentum', d.scores.momentum],
-    ['Price Action', d.scores.priceAction],
-    ['News Sentiment', d.scores.newsSentiment],
+    ['Technical', d.scores.technical],
+    ['Macro', d.scores.macro],
+    ['News Sentiment', d.scores.news],
     ['Confidence', d.scores.confidence],
   ].map(([label,val])=>`
     <div class="score-bar-row">
       <div class="slabel">${label}</div>
       <div class="bar-track"><div class="bar-fill" style="width:${val}%"></div></div>
       <div class="snum">${val}</div>
-    </div>`).join('') + `
-    <div class="score-bar-row">
-      <div class="slabel">Volatility Risk</div>
-      <div class="bar-track"><div class="bar-fill risk" style="width:${d.scores.volatilityRisk}%"></div></div>
-      <div class="snum">${d.scores.volatilityRisk}</div>
-    </div>`;
+    </div>`).join('');
+
+  const whyList = d.why.map(w=>`<li>${w}</li>`).join('');
 
   const levelsHtml = `
     <div class="levels-grid">
-      <div class="level-card sup"><div class="llbl">Support</div><div class="lval">${fmt(d.levels.support, d.dec)}</div></div>
-      <div class="level-card"><div class="llbl">Pivot</div><div class="lval">${fmt(d.levels.pivot, d.dec)}</div></div>
-      <div class="level-card res"><div class="llbl">Resistance</div><div class="lval">${fmt(d.levels.resistance, d.dec)}</div></div>
-      <div class="level-card"><div class="llbl">Invalidation</div><div class="lval">${fmt(d.levels.invalidation, d.dec)}</div></div>
+      <div class="level-card sup"><div class="llbl">Support</div><div class="lval">${fmt(d.levels.support, dec)}</div></div>
+      <div class="level-card"><div class="llbl">Pivot</div><div class="lval">${fmt(d.levels.pivot, dec)}</div></div>
+      <div class="level-card res"><div class="llbl">Resistance</div><div class="lval">${fmt(d.levels.resistance, dec)}</div></div>
+      <div class="level-card"><div class="llbl">Invalidation</div><div class="lval">${fmt(d.levels.invalidation, dec)}</div></div>
     </div>`;
 
-  const timelineHtml = d.timeline.map(t=>`
-    <div class="tl-item">
-      <div class="tl-time">${t.time}</div>
-      <div class="tl-event">${t.event}</div>
-      <div class="tl-effect">→ ${t.effect}</div>
-    </div>`).join('');
+  const mtfHtml = Object.entries(d.mtf.table).map(([tfKey, trend])=>{
+    const cls = trend.includes('bull') ? 'bull' : trend.includes('bear') ? 'bear' : 'neutral';
+    const label = trend.includes('bull') ? 'Bullish' : trend.includes('bear') ? 'Bearish' : (trend==='unavailable' ? 'N/A' : 'Neutral');
+    return `<div class="opinion-card"><div class="otitle">${tfKey.toUpperCase()}</div><div class="oval ${cls}">${label}</div></div>`;
+  }).join('');
 
-  const newsHtml = d.news && d.news.length
-    ? d.news.map(n=>{
-        const dot = n.score > 0 ? 'bull' : n.score < 0 ? 'bear' : 'neutral';
+  const macroRows = [
+    d.macro.dxy ? `<div class="tk">DXY <span class="${d.macro.dxy.changePct>=0?'up':'down'}">${d.macro.dxy.changePct>=0?'▲':'▼'} ${Math.abs(d.macro.dxy.changePct).toFixed(2)}%</span></div>` : '',
+    d.macro.vix ? `<div class="tk">VIX <span class="${d.macro.vix.changePct>=0?'up':'down'}">${d.macro.vix.changePct>=0?'▲':'▼'} ${Math.abs(d.macro.vix.changePct).toFixed(2)}%</span></div>` : '',
+    d.macro.us10y ? `<div class="tk">US 10Y <span class="${d.macro.us10y.changePct>=0?'up':'down'}">${d.macro.us10y.changePct>=0?'▲':'▼'} ${Math.abs(d.macro.us10y.changePct).toFixed(2)}%</span></div>` : '',
+    d.macro.fearGreed ? `<div class="tk">Fear &amp; Greed <b>${d.macro.fearGreed.value}</b> (${d.macro.fearGreed.label})</div>` : '',
+  ].filter(Boolean).join('');
+  const macroNotes = d.macro.notes.map(n=>`<li>${n}</li>`).join('');
+
+  const crossAssetHtml = (d.crossAsset||[]).map(c=>`
+    <div class="opinion-card"><div class="otitle">${c.pair}</div><div class="oval ${c.status==='confirming'?'bull':'bear'}">${c.status==='confirming'?'Confirming':'Diverging'}</div></div>
+  `).join('') || '<div class="news-empty">No cross-asset reference data available for this scan.</div>';
+
+  const newsHtml = d.news && d.news.items && d.news.items.length
+    ? d.news.items.map(n=>{
+        const dot = n.direction === 'bullish' ? 'bull' : n.direction === 'bearish' ? 'bear' : 'neutral';
         return `
         <a class="news-item" href="${n.link}" target="_blank" rel="noopener">
           <span class="news-dot ${dot}"></span>
           <span class="news-body">
-            <span class="news-title">${n.title}</span>
+            <span class="news-title">${n.title}${n.impact==='high' ? ' 🔺' : ''}${n.isBreaking ? ' 🆕' : ''}</span>
             <span class="news-meta">${n.source || 'News'} · ${relativeTime(n.pubDate)}</span>
+            <span class="news-meta" style="opacity:0.75;">${n.why}</span>
           </span>
         </a>`;
       }).join('')
     : `<div class="news-empty">No live headlines retrieved for this scan — sentiment defaulted to neutral.</div>`;
 
-  const closedBadge = d.marketClosed ? `<div class="closed-banner">⏸ Market closed for the weekend — showing last traded data</div>` : '';
+  const closedBadge = marketClosed ? `<div class="closed-banner">⏸ Market closed for the weekend — showing last traded data</div>` : '';
 
   const edgeHtml = `
     <div class="edge-section">
@@ -1607,9 +1273,9 @@ function renderReport(d){
           <div class="edge-sub">${d.edge.bbw > 15 ? 'Expanding' : d.edge.bbw < 5 ? 'Compressed' : 'Normal'}</div>
         </div>
         <div class="edge-card">
-          <div class="edge-val" style="color:var(--neon-green)">${d.edge.rr}</div>
-          <div class="edge-lbl">R:R Ratio</div>
-          <div class="edge-sub">${d.edge.rr !== 'N/A' ? 'Based on S/R levels' : 'Neutral bias'}</div>
+          <div class="edge-val" style="color:var(--neon-green)">${d.edge.structureEvent !== 'none' ? d.edge.structureEvent.replace('_',' ') : 'NONE'}</div>
+          <div class="edge-lbl">Structure Event</div>
+          <div class="edge-sub">BOS / CHoCH</div>
         </div>
       </div>
     </div>`;
@@ -1619,50 +1285,66 @@ function renderReport(d){
     <div class="report-header" style="--bias-color:${bc.c}; --bias-bg:${bc.bg}">
       <div class="rh-top">
         <div>
-          <div class="rh-market">${d.name} <span style="color:var(--text-subtle);font-weight:400;font-size:0.9rem;">${d.desc}</span></div>
-          <div class="rh-price">${fmt(d.lastClose, d.dec)} <span class="chg ${chgCls}">${chg>=0?'▲':'▼'} ${Math.abs(chg).toFixed(2)}%</span></div>
-          <div class="rh-session">Session: ${d.session}</div>
+          <div class="rh-market">${d.market.sym} <span style="color:var(--text-subtle);font-weight:400;font-size:0.9rem;">${d.market.desc}</span></div>
+          <div class="rh-price">${fmt(d.lastClose, dec)} <span class="chg ${chgCls}">${chg>=0?'▲':'▼'} ${Math.abs(chg).toFixed(2)}%</span></div>
+          <div class="rh-session">${d.institutionalBias}</div>
         </div>
         <div class="bias-badge"><span class="arrow">${arrow}</span> ${d.bias}</div>
       </div>
       <div class="metric-row">
-        <div class="metric"><div class="val">${d.confidence}%</div><div class="lbl">Confidence</div></div>
-        <div class="metric"><div class="val">${d.readiness}%</div><div class="lbl">Trade Readiness</div></div>
+        <div class="metric"><div class="val">${d.scores.overall}</div><div class="lbl">Overall Score</div></div>
+        <div class="metric"><div class="val">${d.scores.confidence}%</div><div class="lbl">Confidence</div></div>
         <div class="metric"><div class="val" style="color:${rc.c}">${d.risk}</div><div class="lbl">Volatility Risk</div></div>
       </div>
     </div>
 
     ${edgeHtml}
 
-    <div class="section-title">Structure / Momentum / Volatility / Price Action / News / Divergence</div>
-    <div class="opinion-grid">${oppRow}</div>
+    <div class="section-title">Multi-Timeframe Alignment — ${d.mtf.alignment}</div>
+    <div class="opinion-grid">${mtfHtml}</div>
 
     <div class="section-title">Why</div>
     <div class="why-card"><ul class="why-list">${whyList}</ul></div>
 
+    <div class="section-title">Macro Overlay</div>
+    <div class="mini-ticker" style="margin:0 0 0.75rem;max-width:none;">${macroRows}</div>
+    <div class="why-card"><ul class="why-list">${macroNotes}</ul></div>
+
+    <div class="section-title">Cross-Asset Relationships</div>
+    <div class="opinion-grid">${crossAssetHtml}</div>
+    ${d.crossAssetNote ? `<div class="news-footnote">${d.crossAssetNote} Relationships are directional confirming/diverging checks against the latest daily move — not a statistical correlation coefficient.</div>` : ''}
+
     <div class="section-title">Live News &amp; Sentiment</div>
     <div class="news-card">${newsHtml}</div>
-    <div class="news-footnote">Aggregated via Google News across Reuters, Bloomberg, CNBC, MarketWatch, FXStreet and other outlets. Sentiment is scored by keyword matching — directional context, not verified fact.</div>
+    <div class="news-footnote">Deduplicated via similarity matching across Google News (Reuters, Bloomberg, CNBC, MarketWatch, FXStreet and others). 🔺 = high macro/geopolitical impact · 🆕 = breaking (&lt;2h old). Sentiment is scored by keyword matching — directional context, not verified fact.</div>
 
     <div class="section-title">Key Levels</div>
     ${levelsHtml}
 
     <div class="section-title">Verixa Intelligence Score</div>
     <div class="score-card">
-      <div class="score-headline"><div class="name">Composite Breakdown</div><div class="big">${d.bias} · ${d.confidence}%</div></div>
+      <div class="score-headline"><div class="name">Composite Breakdown</div><div class="big">${d.bias} · ${d.scores.overall}/100</div></div>
       <div class="score-bars">${scoreRows}</div>
     </div>
 
-    <div class="section-title">Recent Price Action</div>
-    <div class="tl-card"><div class="tl">${timelineHtml}</div></div>
-
-    <div class="section-title">AI Trading Coach</div>
+    <div class="section-title">Outlook</div>
     <div class="coach-card">
-      <div class="coach-label">◆ Analyst Note</div>
-      <div class="coach-text">${d.coach}</div>
+      <div class="coach-text"><strong>Short-term:</strong> ${d.outlook.shortTerm}</div>
+      <div class="coach-text"><strong>Medium-term:</strong> ${d.outlook.mediumTerm}</div>
+      <div class="coach-text"><strong>Long-term:</strong> ${d.outlook.longTerm}</div>
     </div>
 
-    <div class="report-footnote">Computed live from public market data (Yahoo Finance / CoinGecko) and live news (Google News) using EMA structure, RSI momentum, ATR volatility, Bollinger Bandwidth, divergence detection and headline sentiment. This explains current conditions and contributing factors — it is not a trading signal or investment advice. Trade decisions and risk remain yours.</div>
+    <div class="section-title">AI Trading Coach — By Trader Type</div>
+    <div class="coach-card">
+      <div class="coach-label">◆ Intraday</div>
+      <div class="coach-text">${d.reasoning.intraday}</div>
+      <div class="coach-label" style="margin-top:0.75rem;">◆ Swing</div>
+      <div class="coach-text">${d.reasoning.swing}</div>
+      <div class="coach-label" style="margin-top:0.75rem;">◆ Long-Term Investor</div>
+      <div class="coach-text">${d.reasoning.longTerm}</div>
+    </div>
+
+    <div class="report-footnote">${d.disclaimer} Computed by the shared Verixa backend (same engine as the Telegram bot) from live market data, macro references, and live news.</div>
   `;
 }
 </script>
