@@ -139,6 +139,19 @@ h1,h2,h3,h4,h5 { line-height:1.2; font-weight:700; letter-spacing:-0.02em; }
   gap:2rem;
 }
 
+/* Prevent grid items from growing past their column to fit wide
+   unbreakable content (e.g. the marquee ticker), which was blowing
+   out the layout width on mobile. min-width:0 lets items shrink to
+   the track size instead of forcing the whole grid wider. */
+.two-col-grid > *,
+.profile-grid > *,
+.contact-grid > *,
+.mini-card-grid > *,
+.expertise-grid > *,
+.faq-grid > * {
+  min-width:0;
+}
+
 /* On desktop, restore multi-column */
 @media (min-width:900px) {
   .two-col-grid  { grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
@@ -813,9 +826,9 @@ h1,h2,h3,h4,h5 { line-height:1.2; font-weight:700; letter-spacing:-0.02em; }
 }
 .cine-name {
   font-size:clamp(2.6rem,8vw,6.2rem); font-weight:800; letter-spacing:-0.03em;
-  line-height:0.95; color:#fff; margin-bottom:1rem;
+  line-height:1.05; color:#fff; margin-bottom:1rem; padding-top:0.1em;
 }
-.cine-name .g { background:linear-gradient(135deg,#fff 15%,var(--green) 85%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.cine-name .g { background:linear-gradient(135deg,#fff 15%,var(--green) 85%); -webkit-background-clip:text; background-clip:text; color:transparent; display:inline-block; }
 .cine-role {
   font-size:clamp(0.85rem,1.3vw,1.05rem); font-weight:500; color:rgba(255,255,255,0.72);
   letter-spacing:0.03em; max-width:520px;
@@ -848,7 +861,7 @@ h1,h2,h3,h4,h5 { line-height:1.2; font-weight:700; letter-spacing:-0.02em; }
 @media (max-width:767px){ .cine-sound-hint{ font-size:0.58rem; bottom:1.1rem; left:1rem; } }
 
 /* ─── Who I Am marquee ticker ─────────────────── */
-.marquee-wrap { overflow:hidden; margin:1.4rem 0 2rem; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+.marquee-wrap { overflow:hidden; width:100%; min-width:0; margin:1.4rem 0 2rem; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
 .marquee-track { display:flex; width:max-content; gap:2.25rem; animation:marqueeScroll 26s linear infinite; }
 .marquee-track span.item { display:inline-flex; align-items:center; gap:0.9rem; font-family:var(--font-mono); font-size:0.85rem; font-weight:600; letter-spacing:0.03em; color:var(--text-muted); white-space:nowrap; }
 .marquee-track span.item .dot { color:var(--green); }
