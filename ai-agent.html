@@ -1346,7 +1346,95 @@ function renderReport(d, marketClosed){
 
     <div class="report-footnote">${d.disclaimer} Computed by the shared Verixa backend (same engine as the Telegram bot) from live market data, macro references, and live news.</div>
   `;
+
+  renderExtendedSections(d);
 }
+
+// ---------------------------------------------------------------------------
+// V2 additions: Smart Money Concepts / market structure, candlestick pattern
+// badges, and tracked accuracy. Reads d.smc / d.patterns / d.assetClass /
+// d.engineNote / d.adaptive from the backend's enhanceReport() layer.
+// Degrades gracefully (renders nothing) if the backend hasn't been
+// redeployed with the V2 layer yet, so this never breaks the existing report.
+// ---------------------------------------------------------------------------
+function renderExtendedSections(d){
+  if(!d.smc && !d.patterns) return;
+
+  const container = document.getElementById('reportBody');
+  const wrap = document.createElement('div');
+
+  const s = d.smc?.structure || {};
+  const structureItems = [
+    s.bos ? `${s.bos === 'bullish' ? 'Bullish' : 'Bearish'} break of structure` : null,
+    s.choch ? s.choch.replace('_', ' ') : null,
+    d.smc?.premiumDiscount?.zone && d.smc.premiumDiscount.zone !== 'equilibrium'
+      ? `Trading in ${d.smc.premiumDiscount.zone} zone (${Math.round(d.smc.premiumDiscount.pct * 100)}% of range)`
+      : null,
+    d.smc?.fvg?.length ? `Active ${d.smc.fvg[0].type} fair value gap` : null,
+    d.smc?.orderBlocks?.length ? `Active ${d.smc.orderBlocks[0].type} order block` : null,
+    d.smc?.liquidity?.swept ? `${d.smc.liquidity.swept === 'bullish' ? 'Bullish' : 'Bearish'} liquidity sweep` : null,
+  ].filter(Boolean);
+
+  const smcHtml = structureItems.length
+    ? `<div class="why-card"><ul class="why-list">${structureItems.map(i => `<li>${i}</li>`).join('')}</ul></div>`
+    : `<div class="news-empty">No active structure/SMC signal on this timeframe right now.</div>`;
+
+  const bull = d.patterns?.bullish || [];
+  const bear = d.patterns?.bearish || [];
+  const patternBadges = [
+    ...bull.map(p => `<div class="opinion-card"><div class="otitle">${p.replace(/_/g, ' ')}</div><div class="oval bull">Bullish</div></div>`),
+    ...bear.map(p => `<div class="opinion-card"><div class="otitle">${p.replace(/_/g, ' ')}</div><div class="oval bear">Bearish</div></div>`),
+  ].join('') || '<div class="news-empty">No candlestick pattern detected on the latest closed candle.</div>';
+
+  const htf = d.smc?.htfStructure?.structure;
+  const htfLine = htf
+    ? `<div class="tk">Higher-timeframe structure: <b style="color:${htf === 'uptrend' ? 'var(--neon-green)' : htf === 'downtrend' ? 'var(--neon-red)' : 'var(--neon-amber)'}">${htf}</b></div>`
+    : '';
+
+  wrap.innerHTML = `
+    <div class="section-title">Smart Money Concepts &amp; Structure</div>
+    ${smcHtml}
+    <div class="mini-ticker" style="margin:0.5rem 0 0;max-width:none;">${htfLine}</div>
+
+    <div class="section-title">Candlestick Patterns</div>
+    <div class="opinion-grid">${patternBadges}</div>
+
+    ${d.engineNote ? `<div class="news-footnote">${d.engineNote} Asset class detected: ${d.assetClass || 'unknown'}.</div>` : ''}
+  `;
+
+  container.appendChild(wrap);
+  renderAdaptiveAccuracy(d);
+}
+
+/** Tracked accuracy strip — only renders a number if the backend returns real logged history. */
+function renderAdaptiveAccuracy(d){
+  if(!d.adaptive) return;
+  const container = document.getElementById('reportBody');
+  const wrap = document.createElement('div');
+
+  const rows = ['BUY', 'SELL'].map(dir => {
+    const a = d.adaptive[dir];
+    const label = a && a.n >= 5
+      ? `${a.winRatePct}% over last ${a.n} tracked ${dir} calls on ${d.market.sym}`
+      : `Not enough tracked history yet (n=${a ? a.n : 0})`;
+    return `
+      <div class="score-bar-row">
+        <div class="slabel">${dir}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${a && a.winRatePct ? a.winRatePct : 0}%"></div></div>
+        <div class="snum">${label}</div>
+      </div>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div class="section-title">Tracked Accuracy — This Asset</div>
+    <div class="score-card">
+      <div class="score-bars">${rows}</div>
+    </div>
+    <div class="news-footnote">Computed only from signals this engine logged and later checked against actual closes — never asserted.</div>
+  `;
+  container.appendChild(wrap);
+}
+
 </script>
 </body>
 </html>
