@@ -92,6 +92,69 @@ if('IntersectionObserver' in window && statNums.length){
   statNums.forEach(el => statIo.observe(el));
 }
 
+/* ── Market session / closed-market logic ──────────────────────────
+   Ported as-is from ai-agent.html's isForexWeekOpen()/SESSIONS logic
+   so the homepage (hero panel + header ticker) reuses the exact same
+   open/closed rules instead of a separate implementation. Only Forex,
+   Metals, Indices and Energy follow this weekly schedule — crypto
+   trades 24/7 and is never marked closed.
+   Namespaced under window.VerixaMarket (rather than bare globals)
+   because ai-agent.html declares its own SESSIONS/isForexWeekOpen as
+   top-level consts — script.js loads first on that page, and a plain
+   duplicate `const SESSIONS` would throw a redeclaration SyntaxError
+   and break the whole page. */
+window.VerixaMarket = (function(){
+  const CRYPTO_SYMBOLS = ['BTC', 'ETH', 'SOL'];
+
+  const SESSIONS = [
+    { name:'Sydney',   start:22, end:7  },
+    { name:'Tokyo',    start:0,  end:9  },
+    { name:'London',   start:8,  end:17 },
+    { name:'New York', start:13, end:22 },
+  ];
+
+  function inSession(hourFloat, s){
+    if (s.start < s.end) return hourFloat >= s.start && hourFloat < s.end;
+    return hourFloat >= s.start || hourFloat < s.end;
+  }
+  function isForexWeekOpen(now){
+    const day = now.getUTCDay();
+    const hour = now.getUTCHours() + now.getUTCMinutes()/60;
+    if (day === 6) return false;
+    if (day === 0 && hour < 22) return false;
+    if (day === 5 && hour >= 22) return false;
+    return true;
+  }
+  function currentSessionLabel(){
+    const now = new Date();
+    if (!isForexWeekOpen(now)) return 'Weekend — Market closed';
+    const hourFloat = now.getUTCHours() + now.getUTCMinutes()/60;
+    const active = SESSIONS.filter(s => inSession(hourFloat, s)).map(s=>s.name);
+    if (active.length === 0) return 'Off-session';
+    if (active.length >= 2) return active.join(' / ') + ' overlap';
+    return active[0] + ' session active';
+  }
+
+  return { CRYPTO_SYMBOLS, isForexWeekOpen, currentSessionLabel };
+})();
+
+/* ── Hero panel (XAUUSD card) — reflects real open/closed state ──── */
+(function updateHeroMarketStatus(){
+  const badge = document.getElementById('heroLiveBadge');
+  const sessionEl = document.getElementById('heroSession');
+  if(!badge && !sessionEl) return;
+  function render(){
+    const open = VerixaMarket.isForexWeekOpen(new Date());
+    if(badge){
+      badge.textContent = open ? 'Live' : 'Closed';
+      badge.classList.toggle('closed', !open);
+    }
+    if(sessionEl) sessionEl.textContent = VerixaMarket.currentSessionLabel();
+  }
+  render();
+  setInterval(render, 30000);
+})();
+
 /* ── Live ticker rail ─────────────────────────────────────────────
    Pulls last price + % change for a small watchlist from the existing
    Verixa backend (/api/price?market=SYMBOL). Falls back to the static
@@ -110,11 +173,18 @@ async function fetchTickerPrice(symbol){
 function renderTicker(rows){
   const track = document.getElementById('tickerTrack');
   if(!track || !rows.length) return;
+  const forexOpen = VerixaMarket.isForexWeekOpen(new Date());
   const build = () => rows.map(r => {
+    const price = Number(r.price).toLocaleString(undefined, { maximumFractionDigits: 5 });
+    const isCrypto = VerixaMarket.CRYPTO_SYMBOLS.includes(r.market);
+    const closed = !isCrypto && !forexOpen;
+    if(closed){
+      // Closed market: show the real last available price, no fake live movement.
+      return `<span class="ticker-item closed"><span class="sym">${r.market}</span> <span class="data">${price}</span> <span class="data closed-label">Closed</span></span>`;
+    }
     const up = r.changePct >= 0;
     const arrow = up ? '▲' : '▼';
     const cls = up ? 'up' : 'down';
-    const price = Number(r.price).toLocaleString(undefined, { maximumFractionDigits: 5 });
     const pct = Math.abs(r.changePct).toFixed(2);
     return `<span class="ticker-item"><span class="sym">${r.market}</span> <span class="data">${price}</span> <span class="data ${cls}">${arrow} ${pct}%</span></span>`;
   }).join('');
