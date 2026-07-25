@@ -3,119 +3,87 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>About — VERIXA | Engineering Smarter Financial Solutions</title>
-<meta name="description" content="Learn the story behind Verixa — how a software engineer combined engineering expertise with financial markets to build professional trading technology."/>
+<title>About — Verixa | Engineering Meets Markets</title>
+<meta name="description" content="How Verixa combines software engineering discipline with market intelligence to build the Verixa 4C Model, analytics, and HANIRA."/>
 <link rel="icon" type="image/x-icon" href="favicon.ico"/>
 <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<meta name="theme-color" content="#050816"/>
+<meta name="theme-color" content="#07080a"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-<div id="page-fade" aria-hidden="true"></div>
 
-<!-- NAVBAR -->
 <nav id="navbar">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">VERIXA<span class="logo-dot">.</span></a>
+    <a href="index.html" class="nav-logo"><span class="mark"></span>VERIXA</a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
-      <li><a href="indicator.html">Indicator</a></li>
+      <li><a href="indicator.html">4C Model</a></li>
       <li><a href="founder.html">Founder</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <div class="nav-actions">
-      <a href="ai-agent.html" class="nav-ai-standalone"><span class="ai-dot"></span>AI Agent</a>
-      <div class="nav-cta">
-        <a href="indicator.html" class="btn btn-primary btn-sm">Explore Indicator</a>
-      </div>
-      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="ai-agent.html" class="nav-hanira"><span class="pulse"></span>Ask HANIRA</a>
+      <a href="indicator.html" class="btn btn-gold btn-sm">Explore 4C Model</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
+<div class="ticker-rail" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item"><span class="sym">XAUUSD</span> <span class="data">—</span></span>
+    <span class="ticker-item"><span class="sym">BTC</span> <span class="data">—</span></span>
+    <span class="ticker-item"><span class="sym">EURUSD</span> <span class="data">—</span></span>
+    <span class="ticker-item"><span class="sym">ETH</span> <span class="data">—</span></span>
+    <span class="ticker-item"><span class="sym">DXY</span> <span class="data">—</span></span>
+    <span class="ticker-item"><span class="sym">SPX500</span> <span class="data">—</span></span>
+  </div>
+</div>
 <div class="mobile-menu" id="mobile-menu">
   <ul>
     <li><a href="index.html">Home</a></li>
     <li><a href="about.html">About</a></li>
-    <li><a href="indicator.html">Indicator</a></li>
+    <li><a href="indicator.html">4C Model</a></li>
     <li><a href="founder.html">Founder</a></li>
     <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-agent.html">Ask HANIRA</a></li>
   </ul>
   <div class="mobile-cta">
-    <a href="indicator.html" class="btn btn-primary">Explore Indicator</a>
-    <a href="founder.html" class="btn btn-outline">Contact Founder</a>
+    <a href="indicator.html" class="btn btn-gold">Explore 4C Model</a>
+    <a href="founder.html" class="btn btn-line">Contact Founder</a>
   </div>
 </div>
 
-<!-- PAGE HERO -->
-<section class="page-hero" style="position:relative;overflow:hidden;">
-  <div class="orb orb-green" style="width:420px;height:420px;top:-120px;left:-80px;opacity:0.14;"></div>
-  <div class="orb orb-blue"  style="width:340px;height:340px;bottom:-80px;right:-80px;opacity:0.1;"></div>
-  <div class="container" style="position:relative;z-index:1;">
-    <div class="badge badge-green animate-fadeup" style="margin-bottom:1.1rem;">Company Story</div>
-    <h1 class="display-xl animate-fadeup delay-1" style="max-width:620px;margin:0 auto 1rem;">About <span class="gradient-text">VERIXA</span></h1>
-    <p class="body-lg text-muted animate-fadeup delay-2" style="max-width:520px;margin:0 auto;">
-      A financial technology company born from the intersection of software engineering and financial markets.
-    </p>
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow" style="justify-content:center;">Company Story</span>
+    <h1 class="display-1">About Verixa</h1>
+    <p class="lede">A financial technology company born from the intersection of software engineering and financial markets.</p>
   </div>
 </section>
 
 <!-- MISSION -->
-<section class="section" style="background:var(--bg-primary);">
+<section class="section">
   <div class="container">
-    <div class="two-col-grid">
+    <div class="grid-2 align-start">
       <div class="reveal">
-        <div class="section-eyebrow label">Our Mission</div>
-        <h2 class="display-md" style="margin:0.85rem 0 1.25rem;">Bridging the Gap Between Engineering and Markets</h2>
-        <p class="body-md text-muted" style="margin-bottom:1rem;">
-          Verixa bridges the gap between software engineering and financial markets by building intelligent trading technologies, advanced analytics, and automation solutions that empower traders with better decision-making.
-        </p>
-        <p class="body-md text-muted" style="margin-bottom:1rem;">
-          The financial technology industry has long been dominated by two extremes: sophisticated institutional tools inaccessible to independent traders, and consumer-grade products built more for marketing than genuine market analysis.
-        </p>
-        <p class="body-md text-muted">
-          Verixa exists in the space between — professional-grade technology built with engineering rigour, designed to be usable by serious retail and professional traders.
-        </p>
+        <span class="eyebrow">Our Mission</span>
+        <h2 class="display-2 mt-2">Bridging engineering and markets.</h2>
+        <p class="body mt-2">Verixa bridges the gap between software engineering and financial markets by building intelligent trading technologies, advanced analytics, and automation solutions that empower traders with better decision-making.</p>
+        <p class="body mt-1">The financial technology industry has long been dominated by two extremes: sophisticated institutional tools inaccessible to independent traders, and consumer-grade products built more for engagement than genuine market analysis.</p>
+        <p class="body mt-1">Verixa exists in the space between — professional-grade technology built with engineering rigour, designed to be usable by serious retail and professional traders.</p>
       </div>
-      <div class="reveal delay-2">
-        <div class="glass">
-          <h3 class="display-sm" style="margin-bottom:1.35rem;">Core Values</h3>
-          <div style="display:flex;flex-direction:column;gap:1.1rem;">
-            <div class="feature-item">
-              <div class="feature-check">✓</div>
-              <div>
-                <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.25rem;">Engineering Integrity</div>
-                <p class="body-sm text-muted">Every tool is built with the same rigour applied to production software systems.</p>
-              </div>
-            </div>
-            <div class="feature-item">
-              <div class="feature-check">✓</div>
-              <div>
-                <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.25rem;">Methodological Transparency</div>
-                <p class="body-sm text-muted">We explain what our tools do and how — no proprietary black boxes with mysterious claims.</p>
-              </div>
-            </div>
-            <div class="feature-item">
-              <div class="feature-check">✓</div>
-              <div>
-                <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.25rem;">Market Objectivity</div>
-                <p class="body-sm text-muted">Tools that analyse and present — they do not predict or promise outcomes.</p>
-              </div>
-            </div>
-            <div class="feature-item">
-              <div class="feature-check">✓</div>
-              <div>
-                <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.25rem;">Continuous Improvement</div>
-                <p class="body-sm text-muted">Iterative development guided by real market conditions and user feedback.</p>
-              </div>
-            </div>
-          </div>
+      <div class="reveal" style="transition-delay:0.1s">
+        <span class="eyebrow">Core Values</span>
+        <div class="value-list mt-2">
+          <div class="value-row"><span class="mark">—</span><div><h4>Engineering Integrity</h4><p>Every tool is built with the same rigour applied to production software systems.</p></div></div>
+          <div class="value-row"><span class="mark">—</span><div><h4>Methodological Transparency</h4><p>We explain what our tools do and how — no proprietary black boxes with mysterious claims.</p></div></div>
+          <div class="value-row"><span class="mark">—</span><div><h4>Market Objectivity</h4><p>Tools that analyse and present — they do not predict or promise outcomes.</p></div></div>
+          <div class="value-row"><span class="mark">—</span><div><h4>Continuous Improvement</h4><p>Iterative development guided by real market conditions and user feedback.</p></div></div>
         </div>
       </div>
     </div>
@@ -123,51 +91,43 @@
 </section>
 
 <!-- STORY -->
-<section class="section">
+<section class="section hairline" style="background:var(--panel);">
   <div class="container">
-    <div class="section-header reveal">
-      <div class="section-eyebrow label">The Story</div>
-      <h2 class="display-md" style="margin:0.85rem 0 0.5rem;">How Verixa Came to Be</h2>
+    <div class="section-head center reveal">
+      <span class="eyebrow" style="justify-content:center;">The Story</span>
+      <h2 class="display-2">How Verixa came to be.</h2>
     </div>
-    <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:1.25rem;">
-      <div class="glass reveal">
-        <div class="story-row">
-          <div class="story-icon" style="background:var(--green-dim);">🔍</div>
-          <div>
-            <h3 class="display-sm" style="margin-bottom:0.65rem;">The Problem We Saw</h3>
-            <p class="body-md text-muted" style="margin-bottom:0.85rem;">In years of observing financial technology products, a clear gap emerged: tools available to retail and professional traders were either technically shallow consumer products built for engagement rather than accuracy, or institutional-grade systems priced entirely out of reach.</p>
-            <p class="body-md text-muted">Independent traders were forced to rely on subjective community analysis, oversimplified indicators, or expensive subscriptions that delivered little substance.</p>
-          </div>
+    <div class="story-list">
+      <div class="story-row reveal">
+        <span class="tag">The Problem</span>
+        <div>
+          <h3>The gap we saw</h3>
+          <p>In years of observing financial technology products, a clear gap emerged: tools available to retail and professional traders were either technically shallow consumer products built for engagement rather than accuracy, or institutional-grade systems priced entirely out of reach.</p>
+          <p>Independent traders were forced to rely on subjective community analysis, oversimplified indicators, or expensive subscriptions that delivered little substance.</p>
         </div>
       </div>
-      <div class="glass reveal delay-1">
-        <div class="story-row">
-          <div class="story-icon" style="background:var(--blue-dim);">⚙️</div>
-          <div>
-            <h3 class="display-sm" style="margin-bottom:0.65rem;">The Engineering Approach</h3>
-            <p class="body-md text-muted" style="margin-bottom:0.85rem;">Verixa was founded on a simple premise: apply software engineering principles — clean architecture, testable logic, structured data, continuous improvement — to the problem of market analysis.</p>
-            <p class="body-md text-muted">This means building tools that are deterministic, transparent, and consistent in their behaviour. Not tools that adapt their narrative based on market conditions.</p>
-          </div>
+      <div class="story-row reveal">
+        <span class="tag">The Approach</span>
+        <div>
+          <h3>Engineering, applied to markets</h3>
+          <p>Verixa was founded on a simple premise: apply software engineering principles — clean architecture, testable logic, structured data, continuous improvement — to the problem of market analysis.</p>
+          <p>This means building tools that are deterministic, transparent and consistent in their behaviour, not tools that adapt their narrative based on market conditions.</p>
         </div>
       </div>
-      <div class="glass reveal delay-2">
-        <div class="story-row">
-          <div class="story-icon" style="background:var(--green-dim);">🌐</div>
-          <div>
-            <h3 class="display-sm" style="margin-bottom:0.65rem;">Technology Meets Markets</h3>
-            <p class="body-md text-muted" style="margin-bottom:0.85rem;">By combining expertise in enterprise integrations, cloud technologies, automation, machine learning pipelines, and financial markets, Verixa builds tools that span the full technology stack.</p>
-            <p class="body-md text-muted">TradingView's Pine Script environment was chosen as the primary delivery platform for its deep market penetration, institutional adoption, and the ability to deliver real-time analytics directly within the trader's existing workflow.</p>
-          </div>
+      <div class="story-row reveal">
+        <span class="tag">The Stack</span>
+        <div>
+          <h3>Technology meets markets</h3>
+          <p>By combining expertise in enterprise integrations, cloud technologies, automation, machine learning pipelines, and financial markets, Verixa builds tools that span the full technology stack.</p>
+          <p>TradingView's Pine Script environment was chosen as the primary delivery platform for its deep market penetration, institutional adoption, and the ability to deliver real-time analytics directly within the trader's existing workflow.</p>
         </div>
       </div>
-      <div class="glass reveal delay-3">
-        <div class="story-row">
-          <div class="story-icon" style="background:var(--blue-dim);">🚀</div>
-          <div>
-            <h3 class="display-sm" style="margin-bottom:0.65rem;">The Long-Term Vision</h3>
-            <p class="body-md text-muted" style="margin-bottom:0.85rem;">Verixa's long-term vision is to become a recognised financial technology developer — a company known for producing tools that professionals trust because they are built with integrity, documented with transparency, and improved continuously.</p>
-            <p class="body-md text-muted">From TradingView indicators to cloud-based analytics platforms, algorithmic trading systems to AI-assisted market research tools — Verixa is building toward a complete technology layer for the modern, data-driven trader.</p>
-          </div>
+      <div class="story-row reveal">
+        <span class="tag">The Vision</span>
+        <div>
+          <h3>Where this is going</h3>
+          <p>Verixa's long-term vision is to become a recognised financial technology developer — a company known for producing tools that professionals trust because they are built with integrity, documented with transparency, and improved continuously.</p>
+          <p>From TradingView indicators to cloud-based analytics, algorithmic systems to HANIRA — Verixa is building toward a complete technology layer for the modern, data-driven trader.</p>
         </div>
       </div>
     </div>
@@ -175,75 +135,31 @@
 </section>
 
 <!-- TIMELINE + FOCUS -->
-<section class="section" style="background:var(--bg-primary);">
+<section class="section">
   <div class="container">
-    <div class="two-col-grid">
+    <div class="grid-2 align-start">
       <div class="reveal">
-        <div class="section-eyebrow label">Timeline</div>
-        <h2 class="display-md" style="margin:0.85rem 0 1.75rem;">Building Block by Block</h2>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-year">Foundation</div>
-            <div class="timeline-title">Verixa Established</div>
-            <div class="timeline-desc">The company is founded with a clear mandate: build professional financial technology for serious traders, grounded in engineering principles.</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-year">Research &amp; Development</div>
-            <div class="timeline-title">Indicator Architecture Designed</div>
-            <div class="timeline-desc">Deep research into market structure, price action frameworks, and analytical methodologies informs the design of the core indicator system.</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-year">Technology Build</div>
-            <div class="timeline-title">Pine Script Development</div>
-            <div class="timeline-desc">The proprietary TradingView indicator is developed, tested, and refined through iterative engineering cycles on live market data.</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-year">Present</div>
-            <div class="timeline-title">Expanding the Platform</div>
-            <div class="timeline-desc">Verixa continues expanding its technology stack — analytics, automation, and cloud integrations — to serve a growing base of professional traders.</div>
-          </div>
+        <span class="eyebrow">Timeline</span>
+        <h2 class="display-2 mt-2" style="font-size:clamp(1.5rem,3.4vw,2.15rem);">Building block by block.</h2>
+        <div class="timeline mt-3">
+          <div class="timeline-item"><span class="timeline-tag">Foundation</span><h4>Verixa established</h4><p>Founded with a clear mandate: build professional financial technology for serious traders, grounded in engineering principles.</p></div>
+          <div class="timeline-item"><span class="timeline-tag">R&amp;D</span><h4>4C Model architecture designed</h4><p>Deep research into market structure, price action frameworks and analytical methodologies informs the core indicator system.</p></div>
+          <div class="timeline-item"><span class="timeline-tag">Build</span><h4>Pine Script development</h4><p>The proprietary TradingView indicator is developed, tested and refined through iterative engineering cycles on live market data.</p></div>
+          <div class="timeline-item"><span class="timeline-tag">Present</span><h4>Expanding the platform</h4><p>Verixa continues expanding its stack — analytics, HANIRA and cloud integrations — to serve a growing base of professional traders.</p></div>
         </div>
       </div>
-      <div class="reveal delay-2">
-        <div class="section-eyebrow label">Focus Areas</div>
-        <h2 class="display-md" style="margin:0.85rem 0 1.75rem;">What We Cover</h2>
-        <div style="display:flex;flex-direction:column;gap:0.75rem;">
-          <div class="card" style="padding:1rem 1.25rem;">
-            <div class="flex items-center gap-2">
-              <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
-              <span style="font-weight:600;font-size:0.9rem;">Forex Markets</span>
-            </div>
-          </div>
-          <div class="card" style="padding:1rem 1.25rem;">
-            <div class="flex items-center gap-2">
-              <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
-              <span style="font-weight:600;font-size:0.9rem;">Gold (XAU/USD)</span>
-            </div>
-          </div>
-          <div class="card" style="padding:1rem 1.25rem;">
-            <div class="flex items-center gap-2">
-              <div style="width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0;"></div>
-              <span style="font-weight:600;font-size:0.9rem;">Global Indices</span>
-            </div>
-          </div>
-          <div class="card" style="padding:1rem 1.25rem;">
-            <div class="flex items-center gap-2">
-              <div style="width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0;"></div>
-              <span style="font-weight:600;font-size:0.9rem;">Market Structure Analysis</span>
-            </div>
-          </div>
-          <div class="card" style="padding:1rem 1.25rem;">
-            <div class="flex items-center gap-2">
-              <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
-              <span style="font-weight:600;font-size:0.9rem;">Algorithmic Trading Systems</span>
-            </div>
-          </div>
-          <div class="card" style="padding:1rem 1.25rem;">
-            <div class="flex items-center gap-2">
-              <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
-              <span style="font-weight:600;font-size:0.9rem;">Cloud-Based Analytics</span>
-            </div>
-          </div>
+      <div class="reveal" style="transition-delay:0.1s">
+        <span class="eyebrow">Focus Areas</span>
+        <h2 class="display-2 mt-2" style="font-size:clamp(1.5rem,3.4vw,2.15rem);">What we cover.</h2>
+        <div class="chip-row mt-3">
+          <span class="chip">Forex Markets</span>
+          <span class="chip">Gold (XAU/USD)</span>
+          <span class="chip">Crypto</span>
+          <span class="chip">Global Indices</span>
+          <span class="chip">Market Structure Analysis</span>
+          <span class="chip">Algorithmic Trading Systems</span>
+          <span class="chip">Cloud-Based Analytics</span>
+          <span class="chip">Macro &amp; News Overlay</span>
         </div>
       </div>
     </div>
@@ -251,49 +167,41 @@
 </section>
 
 <!-- CTA -->
-<section class="section" style="position:relative;overflow:hidden;">
-  <div class="orb orb-blue" style="width:450px;height:450px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.1;"></div>
-  <div class="container" style="position:relative;z-index:1;">
-    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto;">
-      <h2 class="display-md" style="margin-bottom:1rem;">Explore What We've <span class="gradient-text">Built</span></h2>
-      <p class="body-lg text-muted" style="margin-bottom:2rem;">See our proprietary indicator in action, or connect directly with the founder to learn more.</p>
-      <div class="hero-cta">
-        <a href="indicator.html" class="btn btn-primary btn-lg">Explore Indicator</a>
-        <a href="founder.html" class="btn btn-outline btn-lg">Meet the Founder</a>
+<section class="section">
+  <div class="container">
+    <div class="cta-band reveal">
+      <h2 class="display-2">Explore what we've built.</h2>
+      <p class="lede" style="max-width:480px; margin:0 auto;">See the 4C Model in action, or connect directly with the founder to learn more.</p>
+      <div class="btn-row">
+        <a href="indicator.html" class="btn btn-gold">Explore the 4C Model</a>
+        <a href="founder.html" class="btn btn-line">Meet the Founder</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer id="footer">
+<footer>
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="nav-logo">VERIXA<span class="logo-dot">.</span></a>
-        <p class="tagline">Built by Engineers. Driven by Markets.</p>
+        <a href="index.html" class="nav-logo"><span class="mark"></span>VERIXA</a>
+        <p class="small">Built by engineers. Driven by markets.</p>
         <div class="footer-socials">
-          <a href="https://www.linkedin.com/in/mohamedhanas" target="_blank" rel="noopener" class="footer-social-btn" aria-label="LinkedIn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-          </a>
-          <a href="https://www.instagram.com/the.pipsociety?igsh=Z25vYmlnbmc1anJz&utm_source=qr" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          </a>
-          <a href="mailto:mohamedhanaskkl@gmail.com" class="footer-social-btn" aria-label="Email">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-          </a>
+          <a href="https://www.linkedin.com/in/mohamedhanas" target="_blank" rel="noopener" class="footer-social-btn" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="https://www.instagram.com/verixafinance" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="mailto:mohamedhanaskkl@gmail.com" class="footer-social-btn" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></a>
         </div>
       </div>
       <div class="footer-col"><h4>Company</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="founder.html">Founder</a></li></ul></div>
-      <div class="footer-col"><h4>Products</h4><ul><li><a href="indicator.html">Indicator</a></li><li><a href="indicator.html">Analytics</a></li><li><a href="indicator.html">Automation</a></li></ul></div>
-      <div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">Get in Touch</a></li><li><a href="founder.html">Meet the Founder</a></li></ul></div>
+      <div class="footer-col"><h4>Products</h4><ul><li><a href="indicator.html">Verixa 4C Model</a></li><li><a href="ai-agent.html">HANIRA</a></li><li><a href="indicator.html">Automation</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">Get in touch</a></li><li><a href="founder.html">Meet the founder</a></li></ul></div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Verixa. All rights reserved.</span>
-      <span>Engineering Smarter Financial Solutions</span>
-    </div>
+    <div class="footer-bottom"><span>© 2026 Verixa. All rights reserved.</span><span>Engineering smarter financial solutions.</span></div>
   </div>
 </footer>
+
 <script src="script.js"></script>
+<script src="hanira-engine.js"></script>
+<script src="hanira-widget.js"></script>
 </body>
 </html>

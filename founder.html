@@ -3,39 +3,33 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Meet the Founder — VERIXA | Mohamed Hanas</title>
-<meta name="description" content="Mohamed Hanas — Founder & Financial Technology Developer at Verixa. Software engineer with expertise in enterprise integrations, cloud technologies, automation, machine learning pipelines, and financial markets."/>
+<title>Meet the Founder — Mohamed Hanas | Verixa</title>
+<meta name="description" content="Mohamed Hanas — Founder & Financial Technology Developer at Verixa. Enterprise integrations, cloud technologies, automation, machine learning pipelines, and financial markets."/>
 <link rel="icon" type="image/x-icon" href="favicon.ico"/>
 <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<meta name="theme-color" content="#050816"/>
+<meta name="theme-color" content="#07080a"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-<div id="page-fade" aria-hidden="true"></div>
 
-<!-- NAVBAR -->
 <nav id="navbar">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">VERIXA<span class="logo-dot">.</span></a>
+    <a href="index.html" class="nav-logo"><span class="mark"></span>VERIXA</a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
-      <li><a href="indicator.html">Indicator</a></li>
+      <li><a href="indicator.html">4C Model</a></li>
       <li><a href="founder.html">Founder</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <div class="nav-actions">
-      <a href="ai-agent.html" class="nav-ai-standalone"><span class="ai-dot"></span>AI Agent</a>
-      <div class="nav-cta">
-        <a href="contact.html" class="btn btn-primary btn-sm">Get in Touch</a>
-      </div>
-      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="ai-agent.html" class="nav-hanira"><span class="pulse"></span>Ask HANIRA</a>
+      <a href="contact.html" class="btn btn-gold btn-sm">Get in Touch</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
@@ -43,97 +37,62 @@
   <ul>
     <li><a href="index.html">Home</a></li>
     <li><a href="about.html">About</a></li>
-    <li><a href="indicator.html">Indicator</a></li>
+    <li><a href="indicator.html">4C Model</a></li>
     <li><a href="founder.html">Founder</a></li>
     <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-agent.html">Ask HANIRA</a></li>
   </ul>
   <div class="mobile-cta">
-    <a href="contact.html" class="btn btn-primary">Get in Touch</a>
-    <a href="indicator.html" class="btn btn-outline">Explore Indicator</a>
+    <a href="contact.html" class="btn btn-gold">Get in touch</a>
+    <a href="indicator.html" class="btn btn-line">Explore 4C Model</a>
   </div>
 </div>
 
 <!-- CINEMATIC VIDEO HERO -->
 <section class="cine-hero" id="cine-hero">
-  <video class="cine-bgvideo" src="founder-intro.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
-  <video class="cine-mainvideo" id="cineVideo" src="founder-intro.mp4" autoplay muted loop playsinline></video>
+  <video id="cineVideo" src="founder-intro.mp4" autoplay muted loop playsinline></video>
   <div class="cine-overlay"></div>
-  <div class="cine-grain"></div>
-
   <div class="cine-hero-content">
-    <p class="cine-eyebrow animate-fadeup">Meet the Founder</p>
-    <h1 class="cine-name animate-fadeup delay-1">Mohamed<br><span class="g">Hanas</span></h1>
-    <p class="cine-role animate-fadeup delay-2">Founder &amp; Financial Technology Developer — Enterprise Integrations, Cloud &amp; Machine Learning</p>
+    <span class="eyebrow">Meet the Founder</span>
+    <h1>Mohamed <em>Hanas</em></h1>
+    <p class="role">Founder &amp; Financial Technology Developer — enterprise integrations, cloud &amp; machine learning.</p>
   </div>
-
-  <div class="cine-sound-hint" id="cineSoundHint">
-    <span class="cine-sound-pulse"></span><span>Tap for sound</span>
-  </div>
-
   <div class="cine-controls">
-    <button class="cine-ctrl-btn" id="cineMuteBtn" aria-label="Toggle sound">
-      <svg id="cineMuteIcon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 5.5h2.5L8 3v10l-3.5-2.5H2V5.5z" fill="currentColor" stroke="none"/><line x1="10" y1="5" x2="14" y2="11"/><line x1="14" y1="5" x2="10" y2="11"/></svg>
+    <span class="cine-sound-hint" id="cineSoundHint">Tap for sound</span>
+    <button class="cine-btn" id="cineMuteBtn" aria-label="Toggle sound">
+      <svg id="cineMuteIcon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 5.5h2.5L8 3v10l-3.5-2.5H2V5.5z" fill="currentColor" stroke="none"/><line x1="10" y1="5" x2="14" y2="11"/><line x1="14" y1="5" x2="10" y2="11"/></svg>
     </button>
-    <button class="cine-ctrl-btn" id="cinePlayBtn" aria-label="Toggle play">
-      <svg id="cinePlayIcon" width="13" height="13" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
+    <button class="cine-btn" id="cinePlayBtn" aria-label="Toggle play">
+      <svg id="cinePlayIcon" width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
     </button>
   </div>
 </section>
 
 <!-- PROFILE -->
-<section class="section" style="padding-top:1.5rem;">
+<section class="section">
   <div class="container">
-    <div class="profile-grid" style="max-width:1040px;margin:0 auto;">
-
-      <!-- Left: Profile card -->
+    <div class="grid-2 align-start" style="max-width:1040px; margin:0 auto;">
       <div class="reveal">
-        <div class="card" style="text-align:center;">
-          <!-- Profile image — replace initials div with <img> when ready -->
-          <div class="profile-image-wrap" style="margin:0 auto 1.5rem;">
-  <img src="Hanas-website.jpg" alt="Mohamed Hanas"
-       style="width:100%;height:100%;object-fit:cover;object-position:center 20%;border-radius:50%;" />
-</div>
-          <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;">Mohamed Hanas</h2>
-          <p class="body-sm text-muted" style="margin-bottom:1.35rem;">Founder &amp; FinTech Developer</p>
-
-          <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem;text-align:left;">
-            <div class="flex items-center gap-2" style="font-size:0.85rem;color:var(--text-muted);">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              United Arab Emirates
-            </div>
-            <div class="flex items-center gap-2" style="font-size:0.85rem;color:var(--text-muted);">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-              mohamedhanaskkl@gmail.com
-            </div>
-            <div class="flex items-center gap-2" style="font-size:0.85rem;color:var(--text-muted);">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              TradingView Developer
-            </div>
+        <div class="profile-card">
+          <div class="profile-avatar"><img src="Hanas-website.jpg" alt="Mohamed Hanas"/></div>
+          <h2>Mohamed Hanas</h2>
+          <p class="small">Founder &amp; FinTech Developer</p>
+          <div class="profile-meta">
+            <span>United Arab Emirates</span>
+            <span>mohamedhanaskkl@gmail.com</span>
+            <span>TradingView Developer</span>
           </div>
-
-          <div class="flex justify-center gap-2" style="margin-bottom:1.5rem;">
-            <a href="https://www.linkedin.com/in/mohamedhanas" target="_blank" rel="noopener" class="footer-social-btn" aria-label="LinkedIn" style="width:42px;height:42px;">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-            <a href="https://www.instagram.com/verixafinance?igsh=Z25vYmlnbmc1anJz&utm_source=qr" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram" style="width:42px;height:42px;">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-            </a>
-            <a href="mailto:mohamedhanaskkl@gmail.com" class="footer-social-btn" aria-label="Email" style="width:42px;height:42px;">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-            </a>
+          <div class="profile-social">
+            <a href="https://www.linkedin.com/in/mohamedhanas" target="_blank" rel="noopener" class="footer-social-btn" aria-label="LinkedIn" style="width:40px;height:40px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+            <a href="https://www.instagram.com/verixafinance" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram" style="width:40px;height:40px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+            <a href="mailto:mohamedhanaskkl@gmail.com" class="footer-social-btn" aria-label="Email" style="width:40px;height:40px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></a>
           </div>
-
-          <div style="padding-top:1.25rem;border-top:1px solid var(--border);">
-            <a href="contact.html" class="btn btn-primary w-full">Get in Touch</a>
-          </div>
+          <a href="contact.html" class="btn btn-gold" style="width:100%;">Get in touch</a>
         </div>
       </div>
-
-      <!-- Right: Story + Expertise -->
-      <div class="reveal delay-1">
-        <div class="section-eyebrow label" style="margin-bottom:0.85rem;">The Story</div>
-        <h2 class="display-md" style="margin-bottom:1rem;">Engineering Meets <span class="gradient-text">Markets</span></h2>
-
+      <div class="reveal" style="transition-delay:0.1s">
+        <span class="eyebrow">The Story</span>
+        <h2 class="display-2 mt-2" style="font-size:clamp(1.5rem,3.4vw,2.15rem);">Engineering meets markets.</h2>
         <div class="marquee-wrap">
           <div class="marquee-track">
             <span class="item">Enterprise Integrations<span class="dot">·</span></span>
@@ -148,80 +107,38 @@
             <span class="item">Financial Markets<span class="dot">·</span></span>
           </div>
         </div>
+        <p class="body mt-2">Mohamed Hanas is a software engineer with expertise in enterprise integrations, cloud technologies, automation, machine learning pipelines, and financial markets. His technical career spans building systems that connect disparate data sources, automate complex workflows, and ship ML-driven pipelines that solve real operational challenges at scale.</p>
+        <p class="body mt-1">His parallel interest in financial markets grew alongside his engineering career — not as a separate pursuit, but as a natural extension of the same analytical instincts that drive good software engineering: structured thinking, systematic problem-solving, and a preference for data over opinion.</p>
+        <p class="body mt-1">Through Verixa, he combines engineering expertise with market research and technology development to create innovative trading solutions and analytical tools. Every tool Verixa builds reflects the same philosophy: transparent logic, testable behaviour, clean architecture, and continuous improvement.</p>
 
-        <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2.25rem;">
-          <p class="body-md text-muted">Mohamed Hanas is a software engineer with expertise in enterprise integrations, cloud technologies, automation, machine learning pipelines, and financial markets. His technical career spans building systems that connect disparate data sources, automate complex workflows, and ship ML-driven pipelines that solve real operational challenges at scale.</p>
-          <p class="body-md text-muted">His parallel interest in financial markets grew alongside his engineering career — not as a separate pursuit, but as a natural extension of the same analytical instincts that drive good software engineering: structured thinking, systematic problem-solving, and a preference for data over opinion.</p>
-          <p class="body-md text-muted">Through Verixa, he combines engineering expertise with market research and technology development to create innovative trading solutions and analytical tools. Every tool Verixa builds reflects the same philosophy: transparent logic, testable behaviour, clean architecture, and continuous improvement.</p>
-        </div>
-
-        <div class="section-eyebrow label" style="margin-bottom:1rem;">Areas of Expertise</div>
-        <div class="expertise-grid" style="margin-bottom:0;">
-          <div class="flex items-center gap-2" style="background:var(--bg-card);padding:0.8rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
-            <span style="font-size:0.85rem;font-weight:500;">Enterprise Integrations</span>
-          </div>
-          <div class="flex items-center gap-2" style="background:var(--bg-card);padding:0.8rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;"></div>
-            <span style="font-size:0.85rem;font-weight:500;">Cloud Architecture</span>
-          </div>
-          <div class="flex items-center gap-2" style="background:var(--bg-card);padding:0.8rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
-            <span style="font-size:0.85rem;font-weight:500;">Automation Engineering</span>
-          </div>
-          <div class="flex items-center gap-2" style="background:var(--bg-card);padding:0.8rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;"></div>
-            <span style="font-size:0.85rem;font-weight:500;">Financial Markets</span>
-          </div>
-          <div class="flex items-center gap-2" style="background:var(--bg-card);padding:0.8rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
-            <span style="font-size:0.85rem;font-weight:500;">Pine Script Dev</span>
-          </div>
-          <div class="flex items-center gap-2" style="background:var(--bg-card);padding:0.8rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;"></div>
-            <span style="font-size:0.85rem;font-weight:500;">Market Structure</span>
-          </div>
-          <div class="flex items-center gap-2" style="background:var(--bg-card);padding:0.8rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
-            <span style="font-size:0.85rem;font-weight:500;">Python &amp; Data Eng</span>
-          </div>
-          <div class="flex items-center gap-2" style="background:var(--bg-card);padding:0.8rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;"></div>
-            <span style="font-size:0.85rem;font-weight:500;">AI &amp; ML Applications</span>
-          </div>
-          <div class="flex items-center gap-2" style="background:var(--bg-card);padding:0.8rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
-            <span style="font-size:0.85rem;font-weight:500;">ML Pipelines</span>
-          </div>
+        <span class="eyebrow mt-3" style="display:inline-flex;">Areas of Expertise</span>
+        <div class="expertise-grid mt-2">
+          <div class="expertise-item"><span class="dot"></span>Enterprise Integrations</div>
+          <div class="expertise-item"><span class="dot"></span>Cloud Architecture</div>
+          <div class="expertise-item"><span class="dot"></span>Automation Engineering</div>
+          <div class="expertise-item"><span class="dot"></span>Financial Markets</div>
+          <div class="expertise-item"><span class="dot"></span>Pine Script Dev</div>
+          <div class="expertise-item"><span class="dot"></span>Market Structure</div>
+          <div class="expertise-item"><span class="dot"></span>Python &amp; Data Eng</div>
+          <div class="expertise-item"><span class="dot"></span>AI &amp; ML Applications</div>
+          <div class="expertise-item"><span class="dot"></span>ML Pipelines</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ACHIEVEMENTS -->
-<section class="section" style="background:var(--bg-primary);">
+<!-- MILESTONES -->
+<section class="section hairline" style="background:var(--panel);">
   <div class="container">
-    <div class="section-header reveal">
-      <div class="section-eyebrow label">Milestones</div>
-      <h2 class="display-md" style="margin:0.85rem 0 0.5rem;">Key Achievements</h2>
+    <div class="section-head center reveal">
+      <span class="eyebrow" style="justify-content:center;">Milestones</span>
+      <h2 class="display-2">Key achievements.</h2>
     </div>
-    <div class="grid-3" style="max-width:900px;margin:0 auto;">
-      <div class="card reveal" style="text-align:center;">
-        <div style="font-size:1.8rem;margin-bottom:0.65rem;">🏗️</div>
-        <h3 class="card-title">Verixa Founded</h3>
-        <p class="card-body">Established a professional financial technology company bridging software engineering and financial markets research.</p>
-      </div>
-      <div class="card reveal delay-1" style="text-align:center;">
-        <div style="font-size:1.8rem;margin-bottom:0.65rem;">📊</div>
-        <h3 class="card-title">Indicator Launched</h3>
-        <p class="card-body">Developed and deployed a proprietary TradingView indicator with advanced market structure analysis capabilities.</p>
-      </div>
-      <div class="card reveal delay-2" style="text-align:center;">
-        <div style="font-size:1.8rem;margin-bottom:0.65rem;">☁️</div>
-        <h3 class="card-title">Cloud Architecture</h3>
-        <p class="card-body">Designed scalable cloud-based infrastructure on Azure supporting financial data pipelines and analytics workloads.</p>
-      </div>
+    <div class="milestone-grid">
+      <div class="milestone-card reveal"><div class="idx">01</div><h4>Verixa founded</h4><p>Established a professional financial technology company bridging software engineering and financial markets research.</p></div>
+      <div class="milestone-card reveal"><div class="idx">02</div><h4>4C Model launched</h4><p>Developed and deployed a proprietary TradingView indicator with advanced market structure analysis capabilities.</p></div>
+      <div class="milestone-card reveal"><div class="idx">03</div><h4>Cloud architecture</h4><p>Designed scalable Cloudflare edge infrastructure supporting financial data pipelines and analytics workloads.</p></div>
     </div>
   </div>
 </section>
@@ -229,117 +146,110 @@
 <!-- VISION -->
 <section class="section">
   <div class="container">
-    <div style="max-width:780px;margin:0 auto;">
-      <div class="glass reveal">
-        <div class="section-eyebrow label" style="margin-bottom:1rem;">The Vision</div>
-        <h2 class="display-md" style="margin-bottom:1.25rem;">What Verixa Is <span class="gradient-text">Building Toward</span></h2>
-        <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.75rem;">
-          <p class="body-md text-muted">The long-term vision is straightforward: become a financial technology company that professional traders and institutions trust — not because of aggressive marketing, but because of the consistent quality and integrity of what gets built.</p>
-          <p class="body-md text-muted">That means expanding the technology platform beyond a single indicator toward a comprehensive suite — analytics dashboards, algorithmic framework libraries, cloud-based market data tools, and AI-assisted research systems.</p>
-          <p class="body-md text-muted">Every trader who uses a Verixa tool should come away with a clearer understanding of what they're seeing in the market, not more noise or false confidence.</p>
-        </div>
-        <div class="hero-cta" style="justify-content:flex-start;">
-          <a href="indicator.html" class="btn btn-primary">Explore the Indicator</a>
-          <a href="contact.html" class="btn btn-outline">Start a Conversation</a>
-        </div>
+    <div style="max-width:760px; margin:0 auto;" class="reveal">
+      <span class="eyebrow">The Vision</span>
+      <h2 class="display-2 mt-2" style="font-size:clamp(1.5rem,3.4vw,2.15rem);">What Verixa is building toward.</h2>
+      <p class="body mt-2">The long-term vision is straightforward: become a financial technology company that professional traders and institutions trust — not because of aggressive marketing, but because of the consistent quality and integrity of what gets built.</p>
+      <p class="body mt-1">That means expanding the technology platform beyond a single indicator toward a comprehensive suite — analytics dashboards, algorithmic framework libraries, cloud-based market data tools, and HANIRA, our AI-assisted research system.</p>
+      <p class="body mt-1">Every trader who uses a Verixa tool should come away with a clearer understanding of what they're seeing in the market — not more noise, and not false confidence.</p>
+      <div class="hero-cta mt-2" style="justify-content:flex-start;">
+        <a href="indicator.html" class="btn btn-gold">Explore the 4C Model</a>
+        <a href="contact.html" class="btn btn-line">Start a Conversation</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CINEMATIC CLOSING PANEL -->
-<section class="cine-close reveal">
-  <video src="founder-close.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+<!-- CINEMATIC CLOSE -->
+<section class="cine-close" id="cineClose">
+  <video class="cine-bg-video" src="founder-close.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+  <video class="cine-fg-video" id="closeVideo" src="founder-close.mp4" autoplay muted playsinline aria-hidden="true"></video>
   <div class="cine-overlay"></div>
-  <div class="container cine-close-content">
+  <div class="container cine-close-content reveal">
     <p class="cine-close-eyebrow">Keep Moving</p>
-    <h2 class="cine-close-line">Every market cycle looks like <span class="g">smoke and noise</span> up close — the work is building tools that let traders <span class="g">see through it</span>.</h2>
+    <h2 class="cine-close-line">Every market cycle looks like <em>smoke and noise</em> up close — the work is building tools that let traders <em>see through it</em>.</h2>
     <div class="hero-cta" style="justify-content:center;">
-      <a href="indicator.html" class="btn btn-primary">Explore the Indicator</a>
-      <a href="contact.html" class="btn btn-outline">Start a Conversation</a>
+      <a href="indicator.html" class="btn btn-gold">Explore the 4C Model</a>
+      <a href="contact.html" class="btn btn-line">Start a Conversation</a>
+    </div>
+  </div>
+  <div class="cine-close-signature">
+    <img src="Hanas-website.jpg" alt="Mohamed Hanas"/>
+    <div>
+      <div class="fr-name">Mohamed Hanas</div>
+      <div class="fr-role">Founder, Verixa</div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer id="footer">
+<footer>
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="nav-logo">VERIXA<span class="logo-dot">.</span></a>
-        <p class="tagline">Built by Engineers. Driven by Markets.</p>
+        <a href="index.html" class="nav-logo"><span class="mark"></span>VERIXA</a>
+        <p class="small">Built by engineers. Driven by markets.</p>
         <div class="footer-socials">
-          <a href="https://www.linkedin.com/in/mohamedhanas" target="_blank" rel="noopener" class="footer-social-btn" aria-label="LinkedIn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-          </a>
-          <a href="https://www.instagram.com/verixafinance?igsh=Z25vYmlnbmc1anJz&utm_source=qr" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          </a>
-          <a href="mailto:mohamedhanaskkl@gmail.com" class="footer-social-btn" aria-label="Email">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-          </a>
+          <a href="https://www.linkedin.com/in/mohamedhanas" target="_blank" rel="noopener" class="footer-social-btn" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="https://www.instagram.com/verixafinance" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="mailto:mohamedhanaskkl@gmail.com" class="footer-social-btn" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></a>
         </div>
       </div>
       <div class="footer-col"><h4>Company</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="founder.html">Founder</a></li></ul></div>
-      <div class="footer-col"><h4>Products</h4><ul><li><a href="indicator.html">Indicator</a></li><li><a href="indicator.html">Analytics</a></li><li><a href="indicator.html">Automation</a></li></ul></div>
-      <div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">Get in Touch</a></li><li><a href="founder.html">Meet the Founder</a></li></ul></div>
+      <div class="footer-col"><h4>Products</h4><ul><li><a href="indicator.html">Verixa 4C Model</a></li><li><a href="ai-agent.html">HANIRA</a></li><li><a href="indicator.html">Automation</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">Get in touch</a></li><li><a href="founder.html">Meet the founder</a></li></ul></div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Verixa. All rights reserved.</span>
-      <span>Engineering Smarter Financial Solutions</span>
-    </div>
+    <div class="footer-bottom"><span>© 2026 Verixa. All rights reserved.</span><span>Engineering smarter financial solutions.</span></div>
   </div>
 </footer>
+
 <script src="script.js"></script>
 <script>
 (function(){
-  var video   = document.getElementById('cineVideo');
+  var video = document.getElementById('cineVideo');
   var muteBtn = document.getElementById('cineMuteBtn');
   var muteIco = document.getElementById('cineMuteIcon');
   var playBtn = document.getElementById('cinePlayBtn');
   var playIco = document.getElementById('cinePlayIcon');
-  var hint    = document.getElementById('cineSoundHint');
+  var soundHint = document.getElementById('cineSoundHint');
   if(!video) return;
-
-  var SOUND_ICON = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 5.5h2.5L8 3v10l-3.5-2.5H2V5.5z" fill="currentColor" stroke="none"/><path d="M10.5 5.5C11.8 6.5 12.5 7.2 12.5 8s-.7 1.5-2 2.5"/><path d="M12 3.5C14 5 15 6.4 15 8s-1 3-3 4.5"/></svg>';
-  var MUTE_ICON  = muteIco ? muteIco.parentElement.innerHTML : '';
-
+  var SOUND_ICON = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 5.5h2.5L8 3v10l-3.5-2.5H2V5.5z" fill="currentColor" stroke="none"/><path d="M10.5 5.5C11.8 6.5 12.5 7.2 12.5 8s-.7 1.5-2 2.5"/><path d="M12 3.5C14 5 15 6.4 15 8s-1 3-3 4.5"/></svg>';
+  var MUTE_ICON = muteIco ? muteIco.parentElement.innerHTML : '';
   function setMuted(isMuted){
     video.muted = isMuted;
     if(muteBtn) muteBtn.innerHTML = isMuted ? MUTE_ICON : SOUND_ICON;
+    if(!isMuted && soundHint) soundHint.classList.add('hidden');
   }
-
-  function dismissHint(){
-    if(hint) hint.classList.add('hidden');
-  }
-
-  // Unmute automatically the first time the visitor interacts with the
-  // page at all (click, tap, scroll, key press) — browsers block audible
-  // autoplay, but any of these count as a user gesture that allows it.
   var unmuteOnce = function(){
     setMuted(false);
-    dismissHint();
-    ['click','touchstart','scroll','keydown'].forEach(function(evt){
-      window.removeEventListener(evt, unmuteOnce);
-    });
+    ['click','touchstart','keydown'].forEach(function(evt){ window.removeEventListener(evt, unmuteOnce); });
   };
-  ['click','touchstart','scroll','keydown'].forEach(function(evt){
-    window.addEventListener(evt, unmuteOnce, { passive:true, once:true });
-  });
-
-  muteBtn && muteBtn.addEventListener('click', function(){
-    setMuted(!video.muted);
-    dismissHint();
-  });
-
+  ['click','touchstart','keydown'].forEach(function(evt){ window.addEventListener(evt, unmuteOnce, { passive:true, once:true }); });
+  muteBtn && muteBtn.addEventListener('click', function(){ setMuted(!video.muted); });
   playBtn && playBtn.addEventListener('click', function(){
     if(video.paused){ video.play(); playIco.innerHTML = '<rect x="2" y="1" width="4" height="12" rx="1"></rect><rect x="8" y="1" width="4" height="12" rx="1"></rect>'; }
     else { video.pause(); playIco.innerHTML = '<polygon points="2,1 13,7 2,13"></polygon>'; }
   });
+})();
 
-  // Auto-hide the hint after a few seconds even without interaction
-  setTimeout(dismissHint, 6000);
+/* Cinematic close — the founder walks into the light for the length of the
+   clip, then the sequence resolves into an actual portrait + name card
+   since the footage itself never turns back to camera. Loops indefinitely. */
+(function(){
+  var section = document.getElementById('cineClose');
+  var fg = document.getElementById('closeVideo');
+  if(!section || !fg) return;
+  var HOLD_MS = 4200;
+  fg.addEventListener('ended', function(){
+    section.classList.add('face-reveal-active');
+    setTimeout(function(){
+      section.classList.remove('face-reveal-active');
+      fg.currentTime = 0;
+      fg.play().catch(function(){});
+    }, HOLD_MS);
+  });
 })();
 </script>
+<script src="hanira-engine.js"></script>
+<script src="hanira-widget.js"></script>
 </body>
 </html>
